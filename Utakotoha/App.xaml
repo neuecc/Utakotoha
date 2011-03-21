@@ -12,7 +12,7 @@
 
     <Application.ApplicationLifetimeObjects>
         <!--Required object that handles lifetime events for the application-->
-        
+        <s:XNAFrameworkDispatcherService />
         
         <shell:PhoneApplicationService 
             Launching="Application_Launching" Closing="Application_Closing" 

@@ -91,6 +91,7 @@
     <Compile Include="Library\SgmlReader\SgmlParser.cs" />
     <Compile Include="Library\SgmlReader\SgmlReader.cs" />
     <Compile Include="Utility\Utility.cs" />
+    <Compile Include="XNAFrameworkDispatcherService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

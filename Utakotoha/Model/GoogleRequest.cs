@@ -33,7 +33,7 @@ namespace Utakotoha
 
         private string CleanHref(string href)
         {
-            return Regex.Match(href, "^.*?(http.+?)&amp;").Groups[1].Value;
+            return Regex.Match(href, "^.*?(http.+?)(&amp;sa=U|$)+").Groups[1].Value;
         }
 
         public IObservable<SearchResult> Search(params string[] keywords)

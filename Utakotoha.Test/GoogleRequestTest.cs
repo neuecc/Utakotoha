@@ -19,6 +19,10 @@ namespace Utakotoha.Test
             (new GoogleRequest().AsDynamic()
                 .CleanHref(@"/url?q=http://d.hatena.ne.jp/keyword/hoge&amp;sa=U&amp;ei=wsGHTe-qFIPEvQO_k9HUCA&amp;ved=0CAkQFjAA&amp;usg=AFQjCNGxRTtlNP9hQ6-FEGw4L7TFAQRzVQ")
                 as string).Is("http://d.hatena.ne.jp/keyword/hoge");
+
+            (new GoogleRequest().AsDynamic()
+                .CleanHref(@"http://d.hatena.ne.jp/keyword/hoge")
+                as string).Is("http://d.hatena.ne.jp/keyword/hoge");
         }
 
         [TestMethod]

@@ -34,16 +34,25 @@ namespace Utakotoha
         {
             InitializeComponent();
 
-            Observable.FromEvent<EventArgs>(h => MediaPlayer.ActiveSongChanged += h, h => MediaPlayer.ActiveSongChanged -= h)
-                .StartWith(default(IEvent<EventArgs>))
-                .Throttle(TimeSpan.FromSeconds(3))
-                .ObserveOnDispatcher()
-                .Select(_ => (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong != null)
-                        ? new { Artist = MediaPlayer.Queue.ActiveSong.Artist.Name, Song = MediaPlayer.Queue.ActiveSong.Name }
-                        : null)
-                .Where(a => a != null)
-                .Select(a => string.Format("site:{0} {1} {2}", GooLyricUri, a.Artist, a.Song))
-                .Subscribe(q => LyricBrowser.Navigate(new Uri("http://google.co.jp/search?num=10&q=" + Uri.EscapeUriString(q))));
+
+
+
+
+
+
+
+
+
+            //Observable.FromEvent<EventArgs>(h => MediaPlayer.ActiveSongChanged += h, h => MediaPlayer.ActiveSongChanged -= h)
+            //    .StartWith(default(IEvent<EventArgs>))
+            //    .Throttle(TimeSpan.FromSeconds(3))
+            //    .ObserveOnDispatcher()
+            //    .Select(_ => (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong != null)
+            //            ? new { Artist = MediaPlayer.Queue.ActiveSong.Artist.Name, Song = MediaPlayer.Queue.ActiveSong.Name }
+            //            : null)
+            //    .Where(a => a != null)
+            //    .Select(a => string.Format("site:{0} {1} {2}", GooLyricUri, a.Artist, a.Song))
+            //    .Subscribe(q => LyricBrowser.Navigate(new Uri("http://google.co.jp/search?num=10&q=" + Uri.EscapeUriString(q))));
 
 //            Observable.FromEvent<NavigationEventArgs>(h => LyricBrowser.Navigated += h, h => LyricBrowser.Navigated -= h)
 //                .Where(e => !e.EventArgs.Uri.Host.Contains(GooHost))
@@ -74,28 +83,28 @@ namespace Utakotoha
 //                });
 
 
-            Observable.FromEvent<NavigationEventArgs>(h => LyricBrowser.Navigated += h, h => LyricBrowser.Navigated -= h)
-                .Where(e => e.EventArgs.Uri.AbsoluteUri.Contains(GooLyricUri))
-                .Delay(TimeSpan.FromSeconds(3))
-                .Take(1)
-                .Repeat()
-                .ObserveOnDispatcher()
-                .Select(e => (e.Sender as WebBrowser).SaveToString())
-                .Select(s => Regex.Match(s, @"s.setAttribute\('src', '(.+?)'"))
-                .Where(m => m.Success)
-                .Select(m => WebRequest.Create(GooUri + m.Groups[1].Value).DownloadStringAsync())
-                .Switch()
-                .Select(s => Regex.Replace(s.Trim(), @"^draw\(|\);$", ""))
-                .Where(s => !string.IsNullOrEmpty(s))
-                .ObserveOnDispatcher()
-                .Subscribe(jsonArray =>
-                {
-                    LyricBrowser.InvokeScript("eval", @"
-                        var array = " + jsonArray + @";
-                        var sb = [];
-                        for(var i = 0; i < array.length; i++) sb.push(array[i]);
-                        document.getElementById('lyric_area').innerHTML = sb.join('<br />')");
-                });
+//            Observable.FromEvent<NavigationEventArgs>(h => LyricBrowser.Navigated += h, h => LyricBrowser.Navigated -= h)
+//                .Where(e => e.EventArgs.Uri.AbsoluteUri.Contains(GooLyricUri))
+//                .Delay(TimeSpan.FromSeconds(3))
+//                .Take(1)
+//                .Repeat()
+//                .ObserveOnDispatcher()
+//                .Select(e => (e.Sender as WebBrowser).SaveToString())
+//                .Select(s => Regex.Match(s, @"s.setAttribute\('src', '(.+?)'"))
+//                .Where(m => m.Success)
+//                .Select(m => WebRequest.Create(GooUri + m.Groups[1].Value).DownloadStringAsync())
+//                .Switch()
+//                .Select(s => Regex.Replace(s.Trim(), @"^draw\(|\);$", ""))
+//                .Where(s => !string.IsNullOrEmpty(s))
+//                .ObserveOnDispatcher()
+//                .Subscribe(jsonArray =>
+//                {
+//                    LyricBrowser.InvokeScript("eval", @"
+//                        var array = " + jsonArray + @";
+//                        var sb = [];
+//                        for(var i = 0; i < array.length; i++) sb.push(array[i]);
+//                        document.getElementById('lyric_area').innerHTML = sb.join('<br />')");
+//                });
         }
     }
 }
