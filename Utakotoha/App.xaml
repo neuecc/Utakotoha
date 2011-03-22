@@ -4,16 +4,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:s="clr-namespace:Utakotoha;assembly=Utakotoha">
+    xmlns:local="clr-namespace:Utakotoha;assembly=Utakotoha">
 
     <!--Application Resources-->
     <Application.Resources>
+        <local:AssemblyInfoBindingHelper x:Key="AssemblyInfo" />
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>
         <!--Required object that handles lifetime events for the application-->
-        <s:XNAFrameworkDispatcherService />
-        
+        <local:XNAFrameworkDispatcherService />
+
         <shell:PhoneApplicationService 
             Launching="Application_Launching" Closing="Application_Closing" 
             Activated="Application_Activated" Deactivated="Application_Deactivated"/>

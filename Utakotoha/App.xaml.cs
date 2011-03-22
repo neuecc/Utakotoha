@@ -12,6 +12,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Microsoft.Phone.Reactive;
+using Microsoft.Xna.Framework.Media;
+using System.IO.IsolatedStorage;
 
 namespace Utakotoha
 {
@@ -50,6 +53,8 @@ namespace Utakotoha
 
             // Phone-specific initialization
             InitializePhoneApplication();
+
+
         }
 
         // Code to execute when the application is launching (eg, from Start)

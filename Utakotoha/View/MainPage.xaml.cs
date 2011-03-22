@@ -20,96 +20,74 @@ using System.Text;
 using System.Windows.Threading;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework.Media;
+using System.Reflection;
+using Microsoft.Phone.Shell;
+using System.IO.IsolatedStorage;
 
 namespace Utakotoha
 {
     public partial class MainPage : PhoneApplicationPage
     {
-        const string GooUri = "http://music.goo.ne.jp";
-        const string GooHost = "music.goo.ne.jp";
-        const string GooLyricUri = "http://music.goo.ne.jp/lyric";
+
 
         // Constructor
         public MainPage()
         {
             InitializeComponent();
+            ApplicationBar = CommonApplicationBar.Create();
 
 
 
 
 
-
-
-
-
-
+            // Global Timer Event ←のやり方がよくわからないのであとで調べる
             Observable.FromEvent<EventArgs>(h => MediaPlayer.ActiveSongChanged += h, h => MediaPlayer.ActiveSongChanged -= h)
-                .Throttle(TimeSpan.FromSeconds(2)) // wait
-                .StartWith(default(IEvent<EventArgs>))
-                .Select(_ => (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong != null)
-                        ? new Song { Artist = MediaPlayer.Queue.ActiveSong.Artist.Name, Title = MediaPlayer.Queue.ActiveSong.Name }
-                        : null)
-                .Where(s => s != null)
-                .Select(s => s.SearchLyric())
-                .Switch()
-                .ObserveOnDispatcher();
-            // TODO: show hogehoge.
-                // .Subscribe();
+               .Throttle(TimeSpan.FromSeconds(2)) // wait
+               .StartWith(default(IEvent<EventArgs>))
+               .Select(_ => (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong != null)
+                       ? new Song { Artist = MediaPlayer.Queue.ActiveSong.Artist.Name, Title = MediaPlayer.Queue.ActiveSong.Name }
+                       : null)
+               .Where(s => s != null)
+               .Where(s =>
+               {
+                   //TODO
+                   // Settings.Load()
+                   return true;
+               })
+               .SelectMany(s => s.SearchLyric(), (song, searchresult) => new { song, searchresult })
+               .ObserveOnDispatcher()
+               .Subscribe(a =>
+               {
+                   IsolatedStorageSettings.ApplicationSettings["__lastsong"] = a.song;
+                   IsolatedStorageSettings.ApplicationSettings["__lastsearch"] = a.searchresult;
+
+                   NavigationService.Navigate(new Uri("/View/LyricBrowse.xaml?song=__lastsong&url=__lastsearch", UriKind.Relative));
+
+
+
+               }, e => { }, () => { });
 
 
 
 
-            //            Observable.FromEvent<NavigationEventArgs>(h => LyricBrowser.Navigated += h, h => LyricBrowser.Navigated -= h)
-            //                .Where(e => !e.EventArgs.Uri.Host.Contains(GooHost))
-            //                .Select(e => (e.Sender as WebBrowser).SaveToString())
-            //                .Select(s =>
-            //                    (string)LyricBrowser.InvokeScript("eval", @"
-            //                        var array = document.getElementsByTagName('a');
-            //                        var result = [];
-            //                        for(var i = 0; i < array.length; i++)
-            //                        {
-            //                            var item = array[i];
-            //                            if(   item.href.indexOf('index.html') != -1
-            //                               && item.innerText.indexOf('歌詞情報 - goo 音楽') != -1)
-            //                               //&& item.innerText.indexOf('" + TempArtistName + @"') != -1
-            //                               //&& item.innerText.indexOf ('" + TempMusicName + @"') != -1)
-            //                            {
-            //                                result.push(item);
-            //                            }
-            //                        };
-            //                        
-            //                        (result.length != 0) ? result[0].href : ''")
-            //                )
-            //                .Catch(Observable.Return(""))
-            //                .Repeat()
-            //                .Subscribe(s =>
-            //                {
-            //                    if (s.Contains(GooLyricUri)) LyricBrowser.Navigate(new Uri(s));
-            //                });
 
 
-            //            Observable.FromEvent<NavigationEventArgs>(h => LyricBrowser.Navigated += h, h => LyricBrowser.Navigated -= h)
-            //                .Where(e => e.EventArgs.Uri.AbsoluteUri.Contains(GooLyricUri))
-            //                .Delay(TimeSpan.FromSeconds(3))
-            //                .Take(1)
-            //                .Repeat()
-            //                .ObserveOnDispatcher()
-            //                .Select(e => (e.Sender as WebBrowser).SaveToString())
-            //                .Select(s => Regex.Match(s, @"s.setAttribute\('src', '(.+?)'"))
-            //                .Where(m => m.Success)
-            //                .Select(m => WebRequest.Create(GooUri + m.Groups[1].Value).DownloadStringAsync())
-            //                .Switch()
-            //                .Select(s => Regex.Replace(s.Trim(), @"^draw\(|\);$", ""))
-            //                .Where(s => !string.IsNullOrEmpty(s))
-            //                .ObserveOnDispatcher()
-            //                .Subscribe(jsonArray =>
-            //                {
-            //                    LyricBrowser.InvokeScript("eval", @"
-            //                        var array = " + jsonArray + @";
-            //                        var sb = [];
-            //                        for(var i = 0; i < array.length; i++) sb.push(array[i]);
-            //                        document.getElementById('lyric_area').innerHTML = sb.join('<br />')");
-            //                });
+
+
         }
+
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            var song = new Song { Artist = "吉幾三", Title = "俺ら東京さ行ぐだ" };
+            var search = new SearchResult("俺ら東京さ行ぐだ", "http://music.goo.ne.jp/lyric/LYRUTND1127/index.html");
+
+            IsolatedStorageSettings.ApplicationSettings["__lastsong"] = song;
+            IsolatedStorageSettings.ApplicationSettings["__lastsearch"] = search;
+
+            NavigationService.Navigate(new Uri("/View/LyricBrowse.xaml?song=__lastsong&url=__lastsearch", UriKind.Relative));
+        }
+
+
     }
 }

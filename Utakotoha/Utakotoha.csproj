@@ -25,6 +25,7 @@
     <SilverlightAppEntry>Utakotoha.App</SilverlightAppEntry>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -37,7 +38,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -83,9 +83,18 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\LyricBrowse.xaml.cs">
+      <DependentUpon>LyricBrowse.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AssemblyInfo.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\TwitterCredential.cs" />
     <Compile Include="Model\TwitterRequest.cs" />
+    <Compile Include="Utility\EventExtensions.cs" />
+    <Compile Include="View\CommonApplicationBar.cs" />
+    <Compile Include="View\TwitterAuth.xaml.cs">
+      <DependentUpon>TwitterAuth.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utility\AsynchronousExtensions.cs" />
     <Compile Include="View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -104,6 +113,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="View\LyricBrowse.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TwitterAuth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

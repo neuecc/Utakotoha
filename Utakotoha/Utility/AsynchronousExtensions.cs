@@ -6,6 +6,8 @@ using System.Net;
 using System.Text;
 #if WINDOWS_PHONE
 using Microsoft.Phone.Reactive;
+#else
+using System.Concurrency;
 #endif
 
 namespace Utakotoha
@@ -38,6 +40,21 @@ namespace Utakotoha
             Value = value;
             TotalLength = totalLength;
             CurrentLength = currentLength;
+        }
+    }
+
+    internal static class ReportingExtensions
+    {
+        /// <summary>Report on Dispatcher</summary>
+        internal static IObservable<T> Report<T>(this IObservable<T> source, Action<T> action)
+        {
+            return source.Report(action, Scheduler.Dispatcher);
+        }
+
+        /// <summary>Report on Scheduler</summary>
+        internal static IObservable<T> Report<T>(this IObservable<T> source, Action<T> action, IScheduler scheduler)
+        {
+            return source.Do(x => scheduler.Schedule(() => action(x)));
         }
     }
 

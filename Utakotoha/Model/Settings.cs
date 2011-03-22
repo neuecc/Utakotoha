@@ -20,8 +20,10 @@ namespace Utakotoha
 
         public static Settings Load()
         {
-            return (Settings)IsolatedStorageSettings.ApplicationSettings[SettingsKey]
-                ?? new Settings();
+            Settings settings;
+            return IsolatedStorageSettings.ApplicationSettings.TryGetValue<Settings>(SettingsKey, out settings)
+                ? settings
+                : new Settings();
         }
     }
 }
