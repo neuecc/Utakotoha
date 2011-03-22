@@ -26,9 +26,9 @@ namespace Utakotoha
         private string BuildQuery(string[] keywords)
         {
             var site = (Site != null) ? "site:" + Uri.EscapeUriString(Site) + " " : "";
-            var num = "num=" + Num;
+            
             return string.Format("http://google.co.jp/search?num={0}&q={1}",
-                Num, site + keywords.Select(s => Uri.EscapeUriString(s.Wrap("\""))).Join(" "));
+                Num, site + keywords.Select(s => s.Wrap("\"").Pipe(Uri.EscapeUriString)).Join(" "));
         }
 
         private string CleanHref(string href)
@@ -39,7 +39,7 @@ namespace Utakotoha
         public IObservable<SearchResult> Search(params string[] keywords)
         {
             var req = (HttpWebRequest)BuildQuery(keywords).Pipe(WebRequest.Create);
-            req.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows Phone 7)"; // dummy ua(set mobile)
+            req.UserAgent = "Mozilla/4.0 (compatible; MSIE 7.0; Windows Phone 7)"; // dummy UA(set mobile)
 
             return Observable.Defer(() => req.GetResponseAsObservable())
                 .Select(res =>
@@ -58,7 +58,6 @@ namespace Utakotoha
                     var a = x.Element("a");
                     return new SearchResult(a.Value, a.Attribute("href").Value.Pipe(CleanHref));
                 });
-
         }
     }
 }

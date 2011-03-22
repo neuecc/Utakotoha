@@ -67,6 +67,9 @@
     <Reference Include="Microsoft.Phone.Interop" />
     <Reference Include="Microsoft.Phone.Reactive" />
     <Reference Include="Microsoft.Xna.Framework" />
+    <Reference Include="ReactiveOAuth.WP7">
+      <HintPath>..\packages\ReactiveOAuth-WP7.0.2.0.0\lib\ReactiveOAuth.WP7.dll</HintPath>
+    </Reference>
     <Reference Include="System.Observable" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Windows" />
@@ -80,6 +83,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Settings.cs" />
+    <Compile Include="Model\TwitterCredential.cs" />
+    <Compile Include="Model\TwitterRequest.cs" />
     <Compile Include="Utility\AsynchronousExtensions.cs" />
     <Compile Include="View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -104,6 +110,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml" />
   </ItemGroup>

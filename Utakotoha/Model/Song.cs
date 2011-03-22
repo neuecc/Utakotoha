@@ -21,5 +21,21 @@ namespace Utakotoha
                           && sr.Title.Contains(Title)
                           && sr.Url.EndsWith("index.html"));
         }
+
+        public IObservable<SearchResult> SearchFromArtist()
+        {
+            return new GoogleRequest { Num = 10, Site = GooLyricUri }
+                .Search(Artist)
+                .Where(sr => sr.Title.Contains(Artist)
+                          && sr.Url.EndsWith("index.html"));
+        }
+
+        public IObservable<SearchResult> SearchFromTitle()
+        {
+            return new GoogleRequest { Num = 10, Site = GooLyricUri }
+                .Search(Title)
+                .Where(sr => sr.Title.Contains(Title)
+                          && sr.Url.EndsWith("index.html"));
+        }
     }
 }

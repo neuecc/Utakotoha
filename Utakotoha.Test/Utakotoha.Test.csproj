@@ -50,6 +50,9 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="ReactiveOAuth">
+      <HintPath>..\packages\ReactiveOAuth.0.2.0.0\lib\Net40\ReactiveOAuth.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -87,10 +90,12 @@
     <Compile Include="..\Utakotoha\Model\Song.cs">
       <Link>Link\Model\Song.cs</Link>
     </Compile>
+    <Compile Include="..\Utakotoha\Utility\AsynchronousExtensions.cs">
+      <Link>Alias\Utility\AsynchronousExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Utakotoha\Utility\Utility.cs">
       <Link>Alias\Utility\Utility.cs</Link>
     </Compile>
-    <Compile Include="Alias\Utility\AsynchronousExtensions.cs" />
     <Compile Include="ChainingAssertion.MSTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GoogleRequestTest.cs" />
