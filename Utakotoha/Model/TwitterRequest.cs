@@ -1,25 +1,16 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Linq;
+using Codeplex.OAuth;
 #if WINDOWS_PHONE
 using Microsoft.Phone.Reactive;
 #endif
-using Codeplex.OAuth;
 
 namespace Utakotoha
 {
-    public static class TwitterRequest
+    public class TwitterRequest
     {
-        const string ConsumerKey = "";
-        const string ConsumerSecret = ""; // secret secret...
+        const string ConsumerKey = "zrYrxJszZfUIfAXkDJVAg";
+        const string ConsumerSecret = "NuNJFqy0prq4ptnyfOGImK0nOHcCvyzOG69zg8nd9I"; // secret secret...
 
         private readonly AccessToken accessToken;
 
@@ -45,7 +36,7 @@ namespace Utakotoha
         {
             return new OAuthAuthorizer(ConsumerKey, ConsumerSecret)
                 .GetAccessToken("http://twitter.com/oauth/access_token", requestToken, pincode)
-                .Select(res => new TwitterCredential(res.ExtraData["user_id"].First(), res.Token));
+                .Select(res => new TwitterCredential(res.ExtraData["screen_name"].First(), res.Token));
         }
 
         public IObservable<string> Post(string postText)

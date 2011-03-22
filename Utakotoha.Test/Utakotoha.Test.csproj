@@ -14,6 +14,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -90,6 +90,12 @@
     <Compile Include="..\Utakotoha\Model\Song.cs">
       <Link>Link\Model\Song.cs</Link>
     </Compile>
+    <Compile Include="..\Utakotoha\Model\TwitterCredential.cs">
+      <Link>Alias\Model\TwitterCredential.cs</Link>
+    </Compile>
+    <Compile Include="..\Utakotoha\Model\TwitterRequest.cs">
+      <Link>Alias\Model\TwitterRequest.cs</Link>
+    </Compile>
     <Compile Include="..\Utakotoha\Utility\AsynchronousExtensions.cs">
       <Link>Alias\Utility\AsynchronousExtensions.cs</Link>
     </Compile>
@@ -100,6 +106,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GoogleRequestTest.cs" />
     <Compile Include="SongTest.cs" />
+    <Compile Include="TwitterRequestTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

@@ -4,13 +4,13 @@ namespace Utakotoha
 {
     public class TwitterCredential
     {
-        public AccessToken OAuthToken { get; private set; }
-        public string TwitterUserId { get; private set; }
+        public AccessToken AccessToken { get; private set; }
+        public string ScreenName { get; private set; }
 
-        public TwitterCredential(string userid, AccessToken token)
+        public TwitterCredential(string screenName, AccessToken accessToken)
         {
-            this.TwitterUserId = userid;
-            this.OAuthToken = token;
+            this.ScreenName = screenName;
+            this.AccessToken = accessToken;
         }
     }
 }
