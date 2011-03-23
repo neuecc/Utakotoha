@@ -13,7 +13,7 @@ using Microsoft.Phone.Reactive;
 
 namespace Utakotoha
 {
-    public static class SongChangedWatcher
+    public static class MediaPlayerWatcher
     {
         /// <summary>raise when ActiveSongChanged and MediaState is Playing</summary>
         public static IObservable<Song> PlayingSongChanged()

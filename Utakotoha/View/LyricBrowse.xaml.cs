@@ -70,7 +70,7 @@ namespace Utakotoha
                         document.getElementById('lyric_area').innerHTML = sb.join('<br />')");
                 });
 
-            var songChanged = SongChangedWatcher.PlayingSongChanged()
+            var songChanged = MediaPlayerWatcher.PlayingSongChanged()
                .Where(_ => Settings.Load().IsAutoSearchWhenMusicChanged)
                .SelectMany(s => s.SearchLyric(), (newsong, searchresult) => new { newsong, searchresult })
                .ObserveOnDispatcher()
