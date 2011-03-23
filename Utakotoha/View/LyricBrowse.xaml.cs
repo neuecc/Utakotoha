@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Text.RegularExpressions;
 using System.IO.IsolatedStorage;
 using System.Diagnostics;
+using Microsoft.Phone.Shell;
 
 namespace Utakotoha
 {
@@ -27,19 +28,33 @@ namespace Utakotoha
         {
             InitializeComponent();
             ApplicationBar = CommonApplicationBar.Create();
+        }
 
-            lyricBrowser.NavigatedAsObservable()
-                .Where(e => e.EventArgs.Uri.AbsoluteUri.Contains(GooLyricUri))
-                .SelectMany(e =>
+        CompositeDisposable disposables = new CompositeDisposable();
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            var hoge = IsolatedStorageSettings.ApplicationSettings;
+
+            var song = (Song)IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong];
+            var searchResult = (SearchResult)IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult];
+
+            PageTitle.Text = song.Title + " - " + song.Artist;
+
+            var navigated = lyricBrowser.NavigatedAsObservable()
+                .Where(ev => ev.EventArgs.Uri.AbsoluteUri.Contains(GooLyricUri))
+                .SelectMany(ev =>
                 {
-                    // 属性が取れるまで3秒毎にポーリングでチェック
+                    // polling when can get attribute
                     return Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(3))
                         .ObserveOnDispatcher()
-                        .Select(_ => (e.Sender as WebBrowser).SaveToString());
+                        .Select(_ => (ev.Sender as WebBrowser).SaveToString())
+                        .Select(s => Regex.Match(s, @"s.setAttribute\('src', '(.+?)'"))
+                        .Where(m => m.Success)
+                        .Take(1);
                 })
-                .Select(s => Regex.Match(s, @"s.setAttribute\('src', '(.+?)'"))
-                .Where(m => m.Success)
-                .Take(1)
                 .Select(m => WebRequest.Create(GooUri + m.Groups[1].Value).DownloadStringAsync())
                 .Switch()
                 .Select(s => Regex.Replace(s.Trim(), @"^draw\(|\);$", ""))
@@ -47,31 +62,35 @@ namespace Utakotoha
                 .ObserveOnDispatcher()
                 .Subscribe(jsonArray =>
                 {
-                    // Json配列を突っ込んで無理やりはめ込み合成する
+                    // insert json array to html
                     lyricBrowser.InvokeScript("eval", @"
                         var array = " + jsonArray + @";
                         var sb = [];
                         for(var i = 0; i < array.length; i++) sb.push(array[i]);
                         document.getElementById('lyric_area').innerHTML = sb.join('<br />')");
                 });
+
+            var songChanged = SongChangedWatcher.PlayingSongChanged()
+               .Where(_ => Settings.Load().IsAutoSearchWhenMusicChanged)
+               .SelectMany(s => s.SearchLyric(), (newsong, searchresult) => new { newsong, searchresult })
+               .ObserveOnDispatcher()
+               .Subscribe(a =>
+               {
+                   IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong] = a.newsong;
+                   IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult] = a.searchresult;
+                   IsolatedStorageSettings.ApplicationSettings.Save();
+                   PageTitle.Text = a.newsong.Title + " - " + a.newsong.Artist;
+                   lyricBrowser.Navigate(new Uri(a.searchresult.Url));
+               });
+
+            new[] { navigated, songChanged }.ForEach(disposables.Add);
+            Dispatcher.BeginInvoke(() => lyricBrowser.Navigate(new Uri(searchResult.Url)));
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            base.OnNavigatedTo(e);
-
-            string lastsong;
-            string lastsearch;
-            if (!NavigationContext.QueryString.TryGetValue("song", out lastsong)
-                || !NavigationContext.QueryString.TryGetValue("url", out lastsearch))
-            {
-                return;
-            }
-            var song = (Song)IsolatedStorageSettings.ApplicationSettings[lastsong];
-            var searchResult = (SearchResult)IsolatedStorageSettings.ApplicationSettings[lastsearch];
-
-            PageTitle.Text = song.Title + " - " + song.Artist;
-            Dispatcher.BeginInvoke(() => lyricBrowser.Navigate(new Uri(searchResult.Url)));
+            base.OnNavigatedFrom(e);
+            disposables.Dispose();
         }
     }
 }

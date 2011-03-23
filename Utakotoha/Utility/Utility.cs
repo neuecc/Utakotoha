@@ -29,5 +29,10 @@ namespace Utakotoha
                     (sb, o) => (index++ == 0) ? sb.Append(o) : sb.AppendFormat("{0}{1}", separator, o))
                 .ToString();
         }
+
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (var item in source) action(item);
+        }
     }
 }

@@ -71,6 +71,7 @@
       <HintPath>..\packages\ReactiveOAuth-WP7.0.2.0.0\lib\ReactiveOAuth.WP7.dll</HintPath>
     </Reference>
     <Reference Include="System.Observable" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -83,6 +84,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Key.cs" />
+    <Compile Include="Model\SongChangedWatcher.cs" />
     <Compile Include="View\LyricBrowse.xaml.cs">
       <DependentUpon>LyricBrowse.xaml</DependentUpon>
     </Compile>

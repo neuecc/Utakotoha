@@ -13,9 +13,17 @@ namespace Utakotoha
         public bool IsAutoClickWhenSearchResultIsOne { get; set; }
         public TwitterCredential TwitterCredential { get; set; }
 
+        public Settings()
+        {
+            // default
+            IsAutoSearchWhenMusicChanged = true;
+            IsAutoClickWhenSearchResultIsOne = false;
+        }
+
         public void Save()
         {
             IsolatedStorageSettings.ApplicationSettings[SettingsKey] = this;
+            IsolatedStorageSettings.ApplicationSettings.Save();
         }
 
         public static Settings Load()

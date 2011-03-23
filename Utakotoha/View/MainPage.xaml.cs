@@ -35,59 +35,44 @@ namespace Utakotoha
         {
             InitializeComponent();
             ApplicationBar = CommonApplicationBar.Create();
-
-
-
-
-
-            // Global Timer Event ←のやり方がよくわからないのであとで調べる
-            Observable.FromEvent<EventArgs>(h => MediaPlayer.ActiveSongChanged += h, h => MediaPlayer.ActiveSongChanged -= h)
-               .Throttle(TimeSpan.FromSeconds(2)) // wait
-               .StartWith(default(IEvent<EventArgs>))
-               .Select(_ => (MediaPlayer.State == MediaState.Playing && MediaPlayer.Queue.ActiveSong != null)
-                       ? new Song { Artist = MediaPlayer.Queue.ActiveSong.Artist.Name, Title = MediaPlayer.Queue.ActiveSong.Name }
-                       : null)
-               .Where(s => s != null)
-               .Where(s =>
-               {
-                   //TODO
-                   // Settings.Load()
-                   return true;
-               })
-               .SelectMany(s => s.SearchLyric(), (song, searchresult) => new { song, searchresult })
-               .ObserveOnDispatcher()
-               .Subscribe(a =>
-               {
-                   IsolatedStorageSettings.ApplicationSettings["__lastsong"] = a.song;
-                   IsolatedStorageSettings.ApplicationSettings["__lastsearch"] = a.searchresult;
-
-                   NavigationService.Navigate(new Uri("/View/LyricBrowse.xaml?song=__lastsong&url=__lastsearch", UriKind.Relative));
-
-
-
-               }, e => { }, () => { });
-
-
-
-
-
-
-
-
         }
 
+        IDisposable activeChanged = Disposable.Empty;
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            activeChanged = Observable.Merge(
+                    SongChangedWatcher.PlayingSongChanged(),
+                    SongChangedWatcher.PlayingSongActive())
+                .Where(_ => Settings.Load().IsAutoSearchWhenMusicChanged)
+                .SelectMany(s => s.SearchLyric(), (song, searchresult) => new { song, searchresult })
+                .ObserveOnDispatcher()
+                .Subscribe(a =>
+                {
+                    IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong] = a.song;
+                    IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult] = a.searchresult;
+                    IsolatedStorageSettings.ApplicationSettings.Save();
+                    NavigationService.Navigate(new Uri("/View/LyricBrowse.xaml", UriKind.Relative));
+                });
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            activeChanged.Dispose();
+        }
+
+        // TODO:test
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             var song = new Song { Artist = "吉幾三", Title = "俺ら東京さ行ぐだ" };
             var search = new SearchResult("俺ら東京さ行ぐだ", "http://music.goo.ne.jp/lyric/LYRUTND1127/index.html");
 
-            IsolatedStorageSettings.ApplicationSettings["__lastsong"] = song;
-            IsolatedStorageSettings.ApplicationSettings["__lastsearch"] = search;
-
-            NavigationService.Navigate(new Uri("/View/LyricBrowse.xaml?song=__lastsong&url=__lastsearch", UriKind.Relative));
+            IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong] = song;
+            IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult] = search;
+            IsolatedStorageSettings.ApplicationSettings.Save();
+            NavigationService.Navigate(new Uri("/View/LyricBrowse.xaml", UriKind.Relative));
         }
-
-
     }
 }
