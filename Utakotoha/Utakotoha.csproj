@@ -85,7 +85,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\Key.cs" />
-    <Compile Include="Model\SongChangedWatcher.cs" />
+    <Compile Include="Model\MediaPlayerWatcher.cs" />
     <Compile Include="View\LyricBrowse.xaml.cs">
       <DependentUpon>LyricBrowse.xaml</DependentUpon>
     </Compile>
