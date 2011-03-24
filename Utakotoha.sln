@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utakotoha.Test", "Utakotoha
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6AA2D26D-03C8-48C8-A7C5-0F5FCAD186E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utakotoha.TestRef", "Utakotoha.TestRef\Utakotoha.TestRef.csproj", "{62D20861-CDD5-4A58-ACFC-598D774587E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{A030B96C-91CE-448F-9A06-641D2B4218D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A030B96C-91CE-448F-9A06-641D2B4218D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A030B96C-91CE-448F-9A06-641D2B4218D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62D20861-CDD5-4A58-ACFC-598D774587E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62D20861-CDD5-4A58-ACFC-598D774587E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62D20861-CDD5-4A58-ACFC-598D774587E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62D20861-CDD5-4A58-ACFC-598D774587E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

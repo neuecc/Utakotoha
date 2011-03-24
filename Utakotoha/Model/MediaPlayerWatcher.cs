@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+using System.Linq;
 using Microsoft.Xna.Framework.Media;
+#if WINDOWS_PHONE
 using Microsoft.Phone.Reactive;
+#endif
 
 namespace Utakotoha
 {
@@ -33,7 +27,7 @@ namespace Utakotoha
         {
             var stateChanged = Observable.FromEvent<EventArgs>(
                     h => MediaPlayer.MediaStateChanged += h, h => MediaPlayer.MediaStateChanged -= h)
-                .Select(_ => MediaPlayer.State);
+                .Select(_ => (MediaPlayer.State));
 
             return stateChanged.Zip(stateChanged.Skip(1), (prev, curr) => new { prev, curr })
                 .Where(a => (a.prev == MediaState.Paused || a.prev == MediaState.Stopped) && a.curr == MediaState.Playing)
