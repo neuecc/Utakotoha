@@ -7,11 +7,10 @@ using System.Net;
 using System.IO;
 using Sgml;
 using System.Xml.Linq;
-using Utakotoha.Moles;
 using Microsoft.Xna.Framework.Media.Moles;
 using Microsoft.Xna.Framework.Media;
 
-namespace Utakotoha.Test
+namespace Utakotoha.Model.Test
 {
     [TestClass]
     public class GoogleRequestTest

@@ -1,5 +1,5 @@
 ﻿
-namespace Utakotoha
+namespace Utakotoha.Model
 {
     /// <summary>string keys for State</summary>
     public static class Key

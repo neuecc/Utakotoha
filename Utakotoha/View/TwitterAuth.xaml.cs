@@ -1,13 +1,13 @@
-﻿using System;
+﻿#if WINDOWS_PHONE
+using Microsoft.Phone.Reactive;
+#endif
+using System;
 using System.Windows;
 using Microsoft.Phone.Controls;
 using System.Text.RegularExpressions;
+using Utakotoha.Model;
 
-#if WINDOWS_PHONE
-using Microsoft.Phone.Reactive;
-#endif
-
-namespace Utakotoha
+namespace Utakotoha.View
 {
     public partial class TwitterAuth : PhoneApplicationPage
     {

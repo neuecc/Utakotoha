@@ -5,7 +5,7 @@ using Codeplex.OAuth;
 using Microsoft.Phone.Reactive;
 #endif
 
-namespace Utakotoha
+namespace Utakotoha.Model
 {
     public class TwitterRequest
     {

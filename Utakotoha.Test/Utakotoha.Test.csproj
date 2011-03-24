@@ -9,7 +9,7 @@
     <ProjectGuid>{A030B96C-91CE-448F-9A06-641D2B4218D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Utakotoha.Test</RootNamespace>
+    <RootNamespace>Utakotoha.Model.Test</RootNamespace>
     <AssemblyName>Utakotoha.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -69,6 +69,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Rx-Main.1.0.2856.0\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
+    <Reference Include="System.Reactive.Moles, Version=1.0.2856.104, Culture=neutral, PublicKeyToken=0ae41878053f6703, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -113,6 +114,7 @@
     <Moles Include="Accessor\Microsoft.Xna.Framework.moles" />
     <None Include="packages.config" />
     <Moles Include="Accessor\Utakotoha.TestRef.moles" />
+    <Moles Include="Accessor\System.Reactive.moles" />
     <Shadow Include="Accessor\Utakotoha.TestRef.accessor" />
   </ItemGroup>
   <ItemGroup>

@@ -2,8 +2,9 @@
 using System.Linq;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Reactive;
+using Utakotoha.Model;
 
-namespace Utakotoha
+namespace Utakotoha.View
 {
     public static class CommonApplicationBar
     {

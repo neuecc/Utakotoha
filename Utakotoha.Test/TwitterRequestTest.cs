@@ -9,7 +9,7 @@ using Sgml;
 using System.Xml.Linq;
 using System.Diagnostics;
 
-namespace Utakotoha.Test
+namespace Utakotoha.Model.Test
 {
     [TestClass]
     public class TwitterRequestTest

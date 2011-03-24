@@ -8,7 +8,7 @@
     <ProjectGuid>{62D20861-CDD5-4A58-ACFC-598D774587E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Utakotoha.TestRef</RootNamespace>
+    <RootNamespace>Utakotoha.Model.TestRef</RootNamespace>
     <AssemblyName>Utakotoha.TestRef</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -5,7 +5,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Reactive;
 using Microsoft.Phone.Shell;
 
-namespace Utakotoha
+namespace Utakotoha.Model
 {
     public static class EventExtensions
     {

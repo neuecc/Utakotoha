@@ -5,7 +5,6 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
@@ -23,8 +22,9 @@ using Microsoft.Xna.Framework.Media;
 using System.Reflection;
 using Microsoft.Phone.Shell;
 using System.IO.IsolatedStorage;
+using Utakotoha.Model;
 
-namespace Utakotoha
+namespace Utakotoha.View
 {
     public partial class MainPage : PhoneApplicationPage
     {
@@ -66,7 +66,7 @@ namespace Utakotoha
         // TODO:test
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            var song = new Song("吉幾三", "俺ら東京さ行ぐだ");
+            var song = new Utakotoha.Model.Song("吉幾三", "俺ら東京さ行ぐだ");
             var search = new SearchResult("俺ら東京さ行ぐだ", "http://music.goo.ne.jp/lyric/LYRUTND1127/index.html");
 
             IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong] = song;

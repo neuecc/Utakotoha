@@ -8,7 +8,7 @@ using System.IO;
 using Sgml;
 using System.Xml.Linq;
 
-namespace Utakotoha.Test
+namespace Utakotoha.Model.Test
 {
     [TestClass]
     public class SongTest

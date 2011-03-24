@@ -1,6 +1,6 @@
 ﻿using Codeplex.OAuth;
 
-namespace Utakotoha
+namespace Utakotoha.Model
 {
     public class TwitterCredential
     {

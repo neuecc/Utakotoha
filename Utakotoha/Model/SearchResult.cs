@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 
-namespace Utakotoha
+namespace Utakotoha.Model
 {
     [DataContract]
     public class SearchResult

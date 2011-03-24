@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Media;
 using Microsoft.Phone.Reactive;
 #endif
 
-namespace Utakotoha
+namespace Utakotoha.Model
 {
     using ActiveSong = Microsoft.Xna.Framework.Media.Song;
 
@@ -41,11 +41,11 @@ namespace Utakotoha
         }
 
         /// <summary>raise when ActiveSongChanged and MediaState is Playing</summary>
-        public static IObservable<Song> PlayingSongChanged()
+        public static IObservable<Song> PlayingSongChanged(int waitSeconds = 2)
         {
             return ActiveSongChanged()
                 .Where(s => s.MediaState == MediaState.Playing)
-                .Throttle(TimeSpan.FromSeconds(2)) // wait for seeking
+                .Throttle(TimeSpan.FromSeconds(waitSeconds)) // wait for seeking
                 .Select(s => new Song(s.ActiveSong.Artist.Name, s.ActiveSong.Name));
         }
 

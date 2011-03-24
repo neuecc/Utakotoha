@@ -11,7 +11,7 @@ using System.IO;
 using Microsoft.Phone.Reactive;
 #endif
 
-namespace Utakotoha
+namespace Utakotoha.Model
 {
     public class GoogleRequest
     {
@@ -26,7 +26,7 @@ namespace Utakotoha
         private string BuildQuery(string[] keywords)
         {
             var site = (Site != null) ? "site:" + Uri.EscapeUriString(Site) + " " : "";
-            
+
             return string.Format("http://google.co.jp/search?num={0}&q={1}",
                 Num, site + keywords.Select(s => s.Wrap("\"").Pipe(Uri.EscapeUriString)).Join(" "));
         }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Utakotoha
+namespace Utakotoha.Model
 {
     public class AssemblyInfo
     {

@@ -1,7 +1,7 @@
 ﻿using System.IO.IsolatedStorage;
 using Codeplex.OAuth;
 
-namespace Utakotoha
+namespace Utakotoha.Model
 {
     // TODO:no tested yet.
 

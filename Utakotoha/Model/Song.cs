@@ -1,22 +1,31 @@
-﻿using System;
-using System.Linq;
-#if WINDOWS_PHONE
+﻿#if WINDOWS_PHONE
 using Microsoft.Phone.Reactive;
 #endif
+using System;
+using System.Linq;
+using System.Runtime.Serialization;
 
-namespace Utakotoha
+namespace Utakotoha.Model
 {
+    [DataContract]
     public class Song
     {
         const string GooLyricUri = "http://music.goo.ne.jp/lyric";
 
+        [DataMember]
         public string Artist { get; private set; }
+        [DataMember]
         public string Title { get; private set; }
 
         public Song(string artist, string title)
         {
             Artist = artist;
             Title = title;
+        }
+
+        public override string ToString()
+        {
+            return Title + " - " + Artist;
         }
 
         public IObservable<SearchResult> SearchLyric()
