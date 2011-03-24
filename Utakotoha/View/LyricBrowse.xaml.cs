@@ -36,14 +36,7 @@ namespace Utakotoha.View
         {
             base.OnNavigatedTo(e);
 
-            var hoge = IsolatedStorageSettings.ApplicationSettings;
-
-            var song = (Song)IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong];
-            var searchResult = (SearchResult)IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult];
-
-            PageTitle.Text = song.Title + " - " + song.Artist;
-
-            var navigated = lyricBrowser.NavigatedAsObservable()
+            lyricBrowser.NavigatedAsObservable()
                 .Where(ev => ev.EventArgs.Uri.AbsoluteUri.Contains(GooLyricUri))
                 .SelectMany(ev =>
                 {
@@ -68,9 +61,10 @@ namespace Utakotoha.View
                         var sb = [];
                         for(var i = 0; i < array.length; i++) sb.push(array[i]);
                         document.getElementById('lyric_area').innerHTML = sb.join('<br />')");
-                });
+                })
+                .Tap(disposables.Add);
 
-            var songChanged = MediaPlayerWatcher.PlayingSongChanged()
+            MediaPlayerWatcher.PlayingSongChanged()
                .Where(_ => Settings.Load().IsAutoSearchWhenMusicChanged)
                .SelectMany(s => s.SearchLyric(), (newsong, searchresult) => new { newsong, searchresult })
                .ObserveOnDispatcher()
@@ -81,9 +75,13 @@ namespace Utakotoha.View
                    IsolatedStorageSettings.ApplicationSettings.Save();
                    PageTitle.Text = a.newsong.Title + " - " + a.newsong.Artist;
                    lyricBrowser.Navigate(new Uri(a.searchresult.Url));
-               });
+               })
+               .Tap(disposables.Add);
 
-            new[] { navigated, songChanged }.ForEach(disposables.Add);
+            var song = (Song)IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong];
+            var searchResult = (SearchResult)IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult];
+
+            PageTitle.Text = song.Title + " - " + song.Artist;
             Dispatcher.BeginInvoke(() => lyricBrowser.Navigate(new Uri(searchResult.Url)));
         }
 

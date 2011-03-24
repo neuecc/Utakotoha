@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.Xna.Framework.Media;
 #if WINDOWS_PHONE
 using Microsoft.Phone.Reactive;
+#else
+using System.Concurrency;
 #endif
 
 namespace Utakotoha.Model
@@ -41,11 +43,11 @@ namespace Utakotoha.Model
         }
 
         /// <summary>raise when ActiveSongChanged and MediaState is Playing</summary>
-        public static IObservable<Song> PlayingSongChanged(int waitSeconds = 2)
+        public static IObservable<Song> PlayingSongChanged(int waitSeconds = 2, IScheduler scheduler = null)
         {
             return ActiveSongChanged()
                 .Where(s => s.MediaState == MediaState.Playing)
-                .Throttle(TimeSpan.FromSeconds(waitSeconds)) // wait for seeking
+                .Throttle(TimeSpan.FromSeconds(waitSeconds), scheduler ?? Scheduler.ThreadPool) // wait for seeking
                 .Select(s => new Song(s.ActiveSong.Artist.Name, s.ActiveSong.Name));
         }
 

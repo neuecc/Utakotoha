@@ -6,20 +6,25 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.Moles;
 using Utakotoha.Model.Moles;
+using System.Concurrency;
 
 namespace Utakotoha.Model.Test
 {
     [TestClass]
     public class MediaPlayerWatcherTest
     {
-        private Microsoft.Xna.Framework.Media.Song CreateSong(string artist, string name)
+        private MediaPlayerWatcher.Status CreateStatus(MediaState state, string artist, string name)
         {
-            return new Microsoft.Xna.Framework.Media.Moles.MSong
+            return new MediaPlayerWatcher.Status
             {
-                NameGet = () => name,
-                ArtistGet = () => new MArtist
+                MediaState = state,
+                ActiveSong = new Microsoft.Xna.Framework.Media.Moles.MSong
                 {
-                    NameGet = () => artist
+                    NameGet = () => name,
+                    ArtistGet = () => new MArtist
+                    {
+                        NameGet = () => artist
+                    }
                 }
             };
         }
@@ -27,53 +32,61 @@ namespace Utakotoha.Model.Test
         [TestMethod, HostType("Moles")]
         public void PlayingSongActiveTest()
         {
-            var fire = new Subject<MediaPlayerWatcher.Status>();
-            MMediaPlayerWatcher.MediaStateChanged = () => fire;
+            // event invoker
+            var invoker = new Subject<MediaPlayerWatcher.Status>();
+            MMediaPlayerWatcher.MediaStateChanged = () => invoker;
 
-            // make behavior subject
-            var target = MediaPlayerWatcher.PlayingSongActive().Publish(default(Song));
+            // make target observable
+            var target = MediaPlayerWatcher.PlayingSongActive().Publish();
             target.Connect();
 
             // at first, stopped
-            fire.OnNext(new MediaPlayerWatcher.Status { MediaState = MediaState.Stopped, ActiveSong = null });
-            target.First().IsNull();
+            using (target.Verify(Verifier.AtZero))
+            {
+                invoker.OnNext(CreateStatus(MediaState.Stopped, "", ""));
+            }
 
             // next, playing
-            fire.OnNext(new MediaPlayerWatcher.Status { MediaState = MediaState.Playing, ActiveSong = CreateSong("artist", "song") });
-            var playing = target.First();
-            playing.Is(s => s.Title == "song" && s.Artist == "artist");
+            using (target.Verify(Verifier.AtOnce, song => song.Is(s => s.Title == "song" && s.Artist == "artist")))
+            {
+                invoker.OnNext(CreateStatus(MediaState.Playing, "artist", "song"));
+            }
 
-            fire.OnNext(new MediaPlayerWatcher.Status { MediaState = MediaState.Stopped, ActiveSong = null });
-            target.First().IsSameReferenceAs(playing); // no called
+            // pause
+            using (target.Verify(Verifier.AtZero))
+            {
+                invoker.OnNext(CreateStatus(MediaState.Paused, "", ""));
+            }
 
-            fire.OnNext(new MediaPlayerWatcher.Status { MediaState = MediaState.Playing, ActiveSong = CreateSong("artist2", "song2") });
-            target.First().Is(s => s.Title == "song2" && s.Artist == "artist2");
+            // play again
+            using (target.Verify(Verifier.AtOnce, song => song.Is(s => s.Title == "song2" && s.Artist == "artist2")))
+            {
+                invoker.OnNext(CreateStatus(MediaState.Playing, "artist2", "song2"));
+            }
         }
 
         [TestMethod, HostType("Moles")]
         public void PlayingSongChangedTest()
         {
-            var fire = new Subject<MediaPlayerWatcher.Status>();
-            MMediaPlayerWatcher.ActiveSongChanged = () => fire;
+            var invoker = new Subject<MediaPlayerWatcher.Status>();
+            MMediaPlayerWatcher.ActiveSongChanged = () => invoker;
 
-            // make behavior subject
-            var target = MediaPlayerWatcher.PlayingSongChanged(0).Publish(default(Song));
-            target.Connect();
+            var target = MediaPlayerWatcher.PlayingSongChanged(0, Scheduler.Immediate);
 
-            // at first, stopped
-            fire.OnNext(new MediaPlayerWatcher.Status { MediaState = MediaState.Playing, ActiveSong = CreateSong("artist1", "song1") });
-            Thread.Sleep(100);
-            target.First().Is(s => s.Title == "song1" && s.Artist == "artist1");
+            using (target.Verify(Verifier.AtOnce, song => song.Is(s => s.Title == "song1" && s.Artist == "artist1")))
+            {
+                invoker.OnNext(CreateStatus(MediaState.Playing, "artist1", "song1"));
+            }
 
-            // next, playing
-            fire.OnNext(new MediaPlayerWatcher.Status { MediaState = MediaState.Playing, ActiveSong = CreateSong("artist2", "song2") });
-            Thread.Sleep(100);
-            var playing = target.First();
-            playing.Is(s => s.Title == "song2" && s.Artist == "artist2");
+            using (target.Verify(Verifier.AtOnce, song => song.Is(s => s.Title == "song2" && s.Artist == "artist2")))
+            {
+                invoker.OnNext(CreateStatus(MediaState.Playing, "artist2", "song2"));
+            }
 
-            fire.OnNext(new MediaPlayerWatcher.Status { MediaState = MediaState.Paused, ActiveSong = CreateSong("artist3", "song3") });
-            Thread.Sleep(100);
-            target.Delay(TimeSpan.FromMilliseconds(10)).First().IsSameReferenceAs(playing); // not change
+            using (target.Verify(Verifier.AtZero))
+            {
+                invoker.OnNext(CreateStatus(MediaState.Paused, "", ""));
+            }
         }
     }
 }
