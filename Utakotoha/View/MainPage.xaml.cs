@@ -66,7 +66,7 @@ namespace Utakotoha
         // TODO:test
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            var song = new Song { Artist = "吉幾三", Title = "俺ら東京さ行ぐだ" };
+            var song = new Song("吉幾三", "俺ら東京さ行ぐだ");
             var search = new SearchResult("俺ら東京さ行ぐだ", "http://music.goo.ne.jp/lyric/LYRUTND1127/index.html");
 
             IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong] = song;

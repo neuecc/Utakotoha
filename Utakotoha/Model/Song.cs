@@ -10,8 +10,14 @@ namespace Utakotoha
     {
         const string GooLyricUri = "http://music.goo.ne.jp/lyric";
 
-        public string Artist { get; set; }
-        public string Title { get; set; }
+        public string Artist { get; private set; }
+        public string Title { get; private set; }
+
+        public Song(string artist, string title)
+        {
+            Artist = artist;
+            Title = title;
+        }
 
         public IObservable<SearchResult> SearchLyric()
         {

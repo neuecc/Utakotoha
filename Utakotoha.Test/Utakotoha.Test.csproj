@@ -85,6 +85,7 @@
     <Compile Include="GoogleRequestTest.cs" />
     <Compile Include="SongTest.cs" />
     <Compile Include="TwitterRequestTest.cs" />
+    <Compile Include="MediaPlayerWatcherTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

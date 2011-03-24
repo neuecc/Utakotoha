@@ -17,7 +17,7 @@ namespace Utakotoha.Test
         [Timeout(3000)]
         public void SearchLyric()
         {
-            var song = new Song { Artist = "吉幾三", Title = "俺ら東京さ行ぐだ" };
+            var song = new Song("吉幾三", "俺ら東京さ行ぐだ");
             var array = song.SearchLyric().ToEnumerable().ToArray();
 
             array.Count().Is(1);
@@ -29,7 +29,7 @@ namespace Utakotoha.Test
         [Timeout(3000)]
         public void SearchFromArtist()
         {
-            var array = new Song { Artist = "吉幾三" }.SearchFromArtist().ToEnumerable().ToArray();
+            var array = new Song("吉幾三", "").SearchFromArtist().ToEnumerable().ToArray();
 
             array.Count().Is(i => i > 1);
             array.All(sr => sr.Title.Contains("吉幾三 歌詞情報 - goo 音楽")).Is(true);
@@ -40,7 +40,7 @@ namespace Utakotoha.Test
         [Timeout(3000)]
         public void SearchFromTitle()
         {
-            var array = new Song { Title = "花" }.SearchFromTitle().ToEnumerable().ToArray();
+            var array = new Song("", "花").SearchFromTitle().ToEnumerable().ToArray();
 
             array.Count().Is(i => i > 1);
             array.Select(sr => sr.Title).All(s => s.Contains("花") && s.Contains("歌詞情報 - goo 音楽")).Is(true);
