@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Concurrency;
 using System.Linq;
-using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Media.Moles;
 using Utakotoha.Model.Moles;
-using System.Concurrency;
 
 namespace Utakotoha.Model.Test
 {
@@ -41,25 +39,25 @@ namespace Utakotoha.Model.Test
             target.Connect();
 
             // at first, stopped
-            using (target.Verify(Verifier.AtZero))
+            using (target.VerifyZero())
             {
                 invoker.OnNext(CreateStatus(MediaState.Stopped, "", ""));
             }
 
             // next, playing
-            using (target.Verify(Verifier.AtOnce, song => song.Is(s => s.Title == "song" && s.Artist == "artist")))
+            using (target.VerifyOnce(song => song.Is(s => s.Title == "song" && s.Artist == "artist")))
             {
                 invoker.OnNext(CreateStatus(MediaState.Playing, "artist", "song"));
             }
 
             // pause
-            using (target.Verify(Verifier.AtZero))
+            using (target.VerifyZero())
             {
                 invoker.OnNext(CreateStatus(MediaState.Paused, "", ""));
             }
 
             // play again
-            using (target.Verify(Verifier.AtOnce, song => song.Is(s => s.Title == "song2" && s.Artist == "artist2")))
+            using (target.VerifyOnce(song => song.Is(s => s.Title == "song2" && s.Artist == "artist2")))
             {
                 invoker.OnNext(CreateStatus(MediaState.Playing, "artist2", "song2"));
             }
@@ -73,17 +71,17 @@ namespace Utakotoha.Model.Test
 
             var target = MediaPlayerWatcher.PlayingSongChanged(0, Scheduler.Immediate);
 
-            using (target.Verify(Verifier.AtOnce, song => song.Is(s => s.Title == "song1" && s.Artist == "artist1")))
+            using (target.VerifyOnce(song => song.Is(s => s.Title == "song1" && s.Artist == "artist1")))
             {
                 invoker.OnNext(CreateStatus(MediaState.Playing, "artist1", "song1"));
             }
 
-            using (target.Verify(Verifier.AtOnce, song => song.Is(s => s.Title == "song2" && s.Artist == "artist2")))
+            using (target.VerifyOnce(song => song.Is(s => s.Title == "song2" && s.Artist == "artist2")))
             {
                 invoker.OnNext(CreateStatus(MediaState.Playing, "artist2", "song2"));
             }
 
-            using (target.Verify(Verifier.AtZero))
+            using (target.VerifyZero())
             {
                 invoker.OnNext(CreateStatus(MediaState.Paused, "", ""));
             }
