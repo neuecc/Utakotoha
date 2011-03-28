@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Utakotoha.Model
+namespace Utakotoha
 {
-    public class AssemblyInfo
+    public class AssemblyInfoData
     {
-        public static readonly AssemblyInfo ExecutingAssembly = new AssemblyInfo(Assembly.GetExecutingAssembly());
+        public static readonly AssemblyInfoData ExecutingAssembly = new AssemblyInfoData(Assembly.GetExecutingAssembly());
 
         public string FileName { get; private set; }
         public string Version { get; private set; }
@@ -20,14 +20,11 @@ namespace Utakotoha.Model
         public string Trademark { get; private set; }
         public string Culture { get; private set; }
 
-        public AssemblyInfo(Assembly assembly)
+        public AssemblyInfoData(Assembly assembly)
         {
-            // Windows Phone 7 can't get GetName()
-            // FileName = assembly.GetName().Name;
-            // Version = assembly.GetName().Version.ToString();
-            var fullnames = assembly.FullName.Split(',');
-            FileName = fullnames[0].Trim();
-            Version = fullnames[1].Replace("Version=", "").Trim();
+            var assemblyName = new AssemblyName(assembly.FullName);
+            FileName = assemblyName.Name;
+            Version = assemblyName.Version.ToString();
 
             FileVersion = GetAttributeName<AssemblyFileVersionAttribute>(assembly, a => a.Version);
             Title = GetAttributeName<AssemblyTitleAttribute>(assembly, a => a.Title);
@@ -47,9 +44,8 @@ namespace Utakotoha.Model
         }
     }
 
-    public class AssemblyInfoBindingHelper
+    public class AssemblyInfoDataBindingHelper
     {
-        public static AssemblyInfo Value { get { return AssemblyInfo.ExecutingAssembly; } }
+        public AssemblyInfoData Value { get { return AssemblyInfoData.ExecutingAssembly; } }
     }
-
 }

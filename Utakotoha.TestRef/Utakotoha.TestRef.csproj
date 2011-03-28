@@ -76,9 +76,6 @@
     <Compile Include="..\Utakotoha\Library\SgmlReader\SgmlReader.cs">
       <Link>SgmlReader.cs</Link>
     </Compile>
-    <Compile Include="..\Utakotoha\Model\AssemblyInfo.cs">
-      <Link>AssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="..\Utakotoha\Model\GoogleRequest.cs">
       <Link>GoogleRequest.cs</Link>
     </Compile>

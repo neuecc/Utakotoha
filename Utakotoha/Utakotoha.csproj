@@ -89,7 +89,7 @@
     <Compile Include="View\LyricBrowse.xaml.cs">
       <DependentUpon>LyricBrowse.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\AssemblyInfo.cs" />
+    <Compile Include="Utility\AssemblyInfoData.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\TwitterCredential.cs" />
     <Compile Include="Model\TwitterRequest.cs" />

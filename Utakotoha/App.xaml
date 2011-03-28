@@ -4,12 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:local="clr-namespace:Utakotoha"
-    xmlns:localm="clr-namespace:Utakotoha.Model">
+    xmlns:local="clr-namespace:Utakotoha">
 
     <!--Application Resources-->
     <Application.Resources>
-        <localm:AssemblyInfoBindingHelper x:Key="AssemblyInfo" />
+        <local:AssemblyInfoDataBindingHelper x:Key="AssemblyInfoData" />
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>
