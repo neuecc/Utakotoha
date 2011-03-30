@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Moles Include="Accessor\Microsoft.Xna.Framework.moles" />
+    <Moles Include="Accessor\mscorlib.moles" />
     <None Include="packages.config" />
     <Moles Include="Accessor\Utakotoha.TestRef.moles" />
     <Moles Include="Accessor\System.Reactive.moles" />
