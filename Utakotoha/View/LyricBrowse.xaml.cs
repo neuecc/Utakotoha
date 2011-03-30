@@ -64,7 +64,7 @@ namespace Utakotoha.View
                 })
                 .Tap(disposables.Add);
 
-            MediaPlayerWatcher.PlayingSongChanged()
+            MediaPlayerStatus.PlayingSongChanged()
                .Where(_ => Settings.Load().IsAutoSearchWhenMusicChanged)
                .SelectMany(s => s.SearchLyric(), (newsong, searchresult) => new { newsong, searchresult })
                .ObserveOnDispatcher()

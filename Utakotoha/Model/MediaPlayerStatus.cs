@@ -11,35 +11,32 @@ namespace Utakotoha.Model
 {
     using ActiveSong = Microsoft.Xna.Framework.Media.Song;
 
-    public static class MediaPlayerWatcher
+    public class MediaPlayerStatus
     {
-        public class Status
-        {
-            public MediaState MediaState { get; set; }
-            public ActiveSong ActiveSong { get; set; }
+        public MediaState MediaState { get; set; }
+        public ActiveSong ActiveSong { get; set; }
 
-            public static Status FromCurrent()
+        public static MediaPlayerStatus FromCurrent()
+        {
+            return new MediaPlayerStatus
             {
-                return new Status
-                {
-                    MediaState = MediaPlayer.State,
-                    ActiveSong = MediaPlayer.Queue.ActiveSong
-                };
-            }
+                MediaState = MediaPlayer.State,
+                ActiveSong = MediaPlayer.Queue.ActiveSong
+            };
         }
 
-        private static IObservable<Status> ActiveSongChanged()
+        private static IObservable<MediaPlayerStatus> ActiveSongChanged()
         {
             return Observable.FromEvent<EventArgs>(
                     h => MediaPlayer.ActiveSongChanged += h, h => MediaPlayer.ActiveSongChanged -= h)
-                .Select(_ => Status.FromCurrent());
+                .Select(_ => MediaPlayerStatus.FromCurrent());
         }
 
-        private static IObservable<Status> MediaStateChanged()
+        private static IObservable<MediaPlayerStatus> MediaStateChanged()
         {
             return Observable.FromEvent<EventArgs>(
                     h => MediaPlayer.MediaStateChanged += h, h => MediaPlayer.MediaStateChanged -= h)
-                .Select(_ => Status.FromCurrent());
+                .Select(_ => MediaPlayerStatus.FromCurrent());
         }
 
         /// <summary>raise when ActiveSongChanged and MediaState is Playing</summary>

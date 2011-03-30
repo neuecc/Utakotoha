@@ -43,8 +43,8 @@ namespace Utakotoha.View
         {
             base.OnNavigatedTo(e);
             activeChanged = Observable.Merge(
-                    MediaPlayerWatcher.PlayingSongChanged(),
-                    MediaPlayerWatcher.PlayingSongActive())
+                    MediaPlayerStatus.PlayingSongChanged(),
+                    MediaPlayerStatus.PlayingSongActive())
                 .Where(_ => Settings.Load().IsAutoSearchWhenMusicChanged)
                 .SelectMany(s => s.SearchLyric(), (song, searchresult) => new { song, searchresult })
                 .ObserveOnDispatcher()

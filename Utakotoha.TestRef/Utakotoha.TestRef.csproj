@@ -82,8 +82,8 @@
     <Compile Include="..\Utakotoha\Model\Key.cs">
       <Link>Key.cs</Link>
     </Compile>
-    <Compile Include="..\Utakotoha\Model\MediaPlayerWatcher.cs">
-      <Link>MediaPlayerWatcher.cs</Link>
+    <Compile Include="..\Utakotoha\Model\MediaPlayerStatus.cs">
+      <Link>MediaPlayerStatus.cs</Link>
     </Compile>
     <Compile Include="..\Utakotoha\Model\SearchResult.cs">
       <Link>SearchResult.cs</Link>

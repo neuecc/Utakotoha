@@ -53,6 +53,8 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Moles, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0ae41878053f6703, processorArchitecture=MSIL" />
+    <Reference Include="mscorlib.Behaviors, Version=0.94.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="mscorlib.Moles, Version=4.0.0.0, Culture=neutral, PublicKeyToken=0ae41878053f6703, processorArchitecture=MSIL" />
     <Reference Include="ReactiveOAuth">
       <HintPath>..\packages\ReactiveOAuth.0.2.0.0\lib\Net40\ReactiveOAuth.dll</HintPath>
     </Reference>
@@ -87,7 +89,7 @@
     <Compile Include="SongTest.cs" />
     <Compile Include="Tools\Verifier.cs" />
     <Compile Include="TwitterRequestTest.cs" />
-    <Compile Include="MediaPlayerWatcherTest.cs" />
+    <Compile Include="MediaPlayerStatusTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

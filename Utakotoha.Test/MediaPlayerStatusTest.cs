@@ -9,11 +9,11 @@ using Utakotoha.Model.Moles;
 namespace Utakotoha.Model.Test
 {
     [TestClass]
-    public class MediaPlayerWatcherTest
+    public class MediaPlayerStatusTest
     {
-        private MediaPlayerWatcher.Status CreateStatus(MediaState state, string artist, string name)
+        private MediaPlayerStatus CreateStatus(MediaState state, string artist, string name)
         {
-            return new MediaPlayerWatcher.Status
+            return new MediaPlayerStatus
             {
                 MediaState = state,
                 ActiveSong = new Microsoft.Xna.Framework.Media.Moles.MSong
@@ -31,11 +31,11 @@ namespace Utakotoha.Model.Test
         public void PlayingSongActiveTest()
         {
             // event invoker
-            var invoker = new Subject<MediaPlayerWatcher.Status>();
-            MMediaPlayerWatcher.MediaStateChanged = () => invoker;
+            var invoker = new Subject<MediaPlayerStatus>();
+            MMediaPlayerStatus.MediaStateChanged = () => invoker;
 
             // make target observable
-            var target = MediaPlayerWatcher.PlayingSongActive().Publish();
+            var target = MediaPlayerStatus.PlayingSongActive().Publish();
             target.Connect();
 
             // at first, stopped
@@ -66,10 +66,10 @@ namespace Utakotoha.Model.Test
         [TestMethod, HostType("Moles")]
         public void PlayingSongChangedTest()
         {
-            var invoker = new Subject<MediaPlayerWatcher.Status>();
-            MMediaPlayerWatcher.ActiveSongChanged = () => invoker;
+            var invoker = new Subject<MediaPlayerStatus>();
+            MMediaPlayerStatus.ActiveSongChanged = () => invoker;
 
-            var target = MediaPlayerWatcher.PlayingSongChanged(0, Scheduler.Immediate);
+            var target = MediaPlayerStatus.PlayingSongChanged(0, Scheduler.Immediate);
 
             using (target.VerifyOnce(song => song.Is(s => s.Title == "song1" && s.Artist == "artist1")))
             {
