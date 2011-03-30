@@ -83,6 +83,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LoggingTest.cs" />
     <Compile Include="Tools\ChainingAssertion.MSTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GoogleRequestTest.cs" />

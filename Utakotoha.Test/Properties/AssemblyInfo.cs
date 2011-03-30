@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Microsoft.Moles.Framework;
 
 // アセンブリに関する一般情報は以下の属性セットを通して制御されます。
 // アセンブリに関連付けられている情報を変更するには、
@@ -33,3 +34,6 @@ using System.Runtime.InteropServices;
 // 既定値にすることができます:
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+// Moles allow types
+[assembly: MoledType(typeof(System.IO.IsolatedStorage.IsolatedStorageFile))]
