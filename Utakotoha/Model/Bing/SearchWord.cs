@@ -21,7 +21,7 @@ namespace Utakotoha.Model.Bing
         {
             return searchWords.GroupBy(s => s.SearchMode)
                 .Select(xs => ((xs.Key == SearchMode.All) ? "" : xs.Key.ToString().ToLower() + ":")
-                    + "(" + xs.Select(s => s.Query).Join(" OR ") + ")")
+                    + "(" + xs.Select(s => s.Query).Join(" AND ") + ")")
                 .Join(" ");
         }
     }

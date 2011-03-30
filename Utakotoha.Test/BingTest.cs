@@ -21,7 +21,7 @@ namespace Utakotoha.Model.Test
                 new SearchWord("taiyaki", SearchMode.InTitle),
             };
 
-            words.BuildQuery().Is("(homu OR mogu) inanchor:(mami OR yellow) inbody:(madomado OR gikagika) intitle:(anko OR taiyaki)");
+            words.BuildQuery().Is("(homu AND mogu) inanchor:(mami AND yellow) inbody:(madomado AND gikagika) intitle:(anko AND taiyaki)");
         }
     }
 }
