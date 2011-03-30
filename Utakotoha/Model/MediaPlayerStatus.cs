@@ -25,14 +25,14 @@ namespace Utakotoha.Model
             };
         }
 
-        private static IObservable<MediaPlayerStatus> ActiveSongChanged()
+        public static IObservable<MediaPlayerStatus> ActiveSongChanged()
         {
             return Observable.FromEvent<EventArgs>(
                     h => MediaPlayer.ActiveSongChanged += h, h => MediaPlayer.ActiveSongChanged -= h)
                 .Select(_ => MediaPlayerStatus.FromCurrent());
         }
 
-        private static IObservable<MediaPlayerStatus> MediaStateChanged()
+        public static IObservable<MediaPlayerStatus> MediaStateChanged()
         {
             return Observable.FromEvent<EventArgs>(
                     h => MediaPlayer.MediaStateChanged += h, h => MediaPlayer.MediaStateChanged -= h)

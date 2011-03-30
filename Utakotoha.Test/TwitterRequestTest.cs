@@ -1,13 +1,6 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Net;
-using System.IO;
-using Sgml;
-using System.Xml.Linq;
-using System.Diagnostics;
 
 namespace Utakotoha.Model.Test
 {

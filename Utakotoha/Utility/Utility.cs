@@ -28,6 +28,11 @@ namespace Utakotoha
             return wrapper + input + wrapper;
         }
 
+        public static string Quote(this string input)
+        {
+            return input.Wrap("\"");
+        }
+
         public static string Join<T>(this IEnumerable<T> source, string separator)
         {
             var index = 0;

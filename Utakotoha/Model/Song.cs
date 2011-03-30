@@ -4,13 +4,15 @@ using Microsoft.Phone.Reactive;
 using System;
 using System.Linq;
 using System.Runtime.Serialization;
+using Utakotoha.Model.Bing;
 
 namespace Utakotoha.Model
 {
     [DataContract]
     public class Song
     {
-        const string GooLyricUri = "http://music.goo.ne.jp/lyric";
+        private static SearchWord LyricSite = new SearchWord("http://music.goo.ne.jp/lyric", SearchLogicalOp.And, SearchTarget.Site);
+        private static SearchWord InAnchor = new SearchWord("index.html", SearchLogicalOp.And, SearchTarget.InAnchor);
 
         [DataMember]
         public string Artist { get; private set; }
@@ -28,27 +30,33 @@ namespace Utakotoha.Model
             return Title + " - " + Artist;
         }
 
-        public IObservable<SearchResult> SearchLyric()
+        private SearchWord MakeWord(string keyword, SearchTarget target = SearchTarget.All)
         {
-            return new GoogleRequest { Num = 10, Site = GooLyricUri }
-                .Search(Artist, Title)
+            return new SearchWord(keyword, SearchLogicalOp.And, target);
+        }
+
+        // not put inanchor for query. inanchor down to precision.
+        public IObservable<SearchWebResult> SearchLyric()
+        {
+            return new BingRequest()
+                .Search(MakeWord(Artist), MakeWord(Title), LyricSite)
                 .Where(sr => sr.Title.Contains(Artist)
                           && sr.Title.Contains(Title)
                           && sr.Url.EndsWith("index.html"));
         }
 
-        public IObservable<SearchResult> SearchFromArtist()
+        public IObservable<SearchWebResult> SearchFromArtist()
         {
-            return new GoogleRequest { Num = 10, Site = GooLyricUri }
-                .Search(Artist)
+            return new BingRequest()
+                .Search(MakeWord(Artist), InAnchor, LyricSite)
                 .Where(sr => sr.Title.Contains(Artist)
                           && sr.Url.EndsWith("index.html"));
         }
 
-        public IObservable<SearchResult> SearchFromTitle()
+        public IObservable<SearchWebResult> SearchFromTitle()
         {
-            return new GoogleRequest { Num = 10, Site = GooLyricUri }
-                .Search(Title)
+            return new BingRequest()
+                .Search(MakeWord(Title), InAnchor, LyricSite)
                 .Where(sr => sr.Title.Contains(Title)
                           && sr.Url.EndsWith("index.html"));
         }

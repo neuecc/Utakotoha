@@ -16,6 +16,7 @@ using System.IO.IsolatedStorage;
 using System.Diagnostics;
 using Microsoft.Phone.Shell;
 using Utakotoha.Model;
+using Utakotoha.Model.Bing;
 
 namespace Utakotoha.View
 {
@@ -79,7 +80,7 @@ namespace Utakotoha.View
                .Tap(disposables.Add);
 
             var song = (Song)IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong];
-            var searchResult = (SearchResult)IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult];
+            var searchResult = (SearchWebResult)IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult];
 
             PageTitle.Text = song.Title + " - " + song.Artist;
             Dispatcher.BeginInvoke(() => lyricBrowser.Navigate(new Uri(searchResult.Url)));

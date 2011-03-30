@@ -84,9 +84,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\Bing\SearchMode.cs" />
+    <Compile Include="Model\Bing\BingRequest.cs" />
+    <Compile Include="Model\Bing\SearchLogicalOp.cs" />
     <Compile Include="Model\Bing\SearchWebResult.cs" />
     <Compile Include="Model\Bing\SearchWord.cs" />
+    <Compile Include="Model\Bing\SearchTarget.cs" />
     <Compile Include="Model\Key.cs" />
     <Compile Include="Model\MediaPlayerStatus.cs" />
     <Compile Include="Utility\Logging.cs" />
@@ -106,12 +108,8 @@
     <Compile Include="View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\GoogleRequest.cs" />
-    <Compile Include="Model\SearchResult.cs" />
     <Compile Include="Model\Song.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Library\SgmlReader\SgmlParser.cs" />
-    <Compile Include="Library\SgmlReader\SgmlReader.cs" />
     <Compile Include="Utility\Utility.cs" />
     <Compile Include="Utility\XNAFrameworkDispatcherService.cs" />
   </ItemGroup>
@@ -146,7 +144,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resource\SplashScreenImage.jpg" />
-    <Content Include="Library\SgmlReader\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

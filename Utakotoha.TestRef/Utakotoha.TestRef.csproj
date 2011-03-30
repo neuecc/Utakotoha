@@ -70,14 +70,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Utakotoha\Library\SgmlReader\SgmlParser.cs">
-      <Link>SgmlParser.cs</Link>
+    <Compile Include="..\Utakotoha\Model\Bing\BingRequest.cs">
+      <Link>BingRequest.cs</Link>
     </Compile>
-    <Compile Include="..\Utakotoha\Library\SgmlReader\SgmlReader.cs">
-      <Link>SgmlReader.cs</Link>
+    <Compile Include="..\Utakotoha\Model\Bing\SearchLogicalOp.cs">
+      <Link>SearchLogicalOp.cs</Link>
     </Compile>
-    <Compile Include="..\Utakotoha\Model\Bing\SearchMode.cs">
-      <Link>SearchMode.cs</Link>
+    <Compile Include="..\Utakotoha\Model\Bing\SearchTarget.cs">
+      <Link>SearchTarget.cs</Link>
     </Compile>
     <Compile Include="..\Utakotoha\Model\Bing\SearchWebResult.cs">
       <Link>SearchWebResult.cs</Link>
@@ -85,17 +85,11 @@
     <Compile Include="..\Utakotoha\Model\Bing\SearchWord.cs">
       <Link>SearchWord.cs</Link>
     </Compile>
-    <Compile Include="..\Utakotoha\Model\GoogleRequest.cs">
-      <Link>GoogleRequest.cs</Link>
-    </Compile>
     <Compile Include="..\Utakotoha\Model\Key.cs">
       <Link>Key.cs</Link>
     </Compile>
     <Compile Include="..\Utakotoha\Model\MediaPlayerStatus.cs">
       <Link>MediaPlayerStatus.cs</Link>
-    </Compile>
-    <Compile Include="..\Utakotoha\Model\SearchResult.cs">
-      <Link>SearchResult.cs</Link>
     </Compile>
     <Compile Include="..\Utakotoha\Model\Song.cs">
       <Link>Song.cs</Link>

@@ -23,6 +23,7 @@ using System.Reflection;
 using Microsoft.Phone.Shell;
 using System.IO.IsolatedStorage;
 using Utakotoha.Model;
+using Utakotoha.Model.Bing;
 
 namespace Utakotoha.View
 {
@@ -67,7 +68,7 @@ namespace Utakotoha.View
         private void button1_Click(object sender, RoutedEventArgs e)
         {
             var song = new Utakotoha.Model.Song("吉幾三", "俺ら東京さ行ぐだ");
-            var search = new SearchResult("俺ら東京さ行ぐだ", "http://music.goo.ne.jp/lyric/LYRUTND1127/index.html");
+            var search = new SearchWebResult { Title = "俺ら東京さ行ぐだ", Url = "http://music.goo.ne.jp/lyric/LYRUTND1127/index.html" };
 
             IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong] = song;
             IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult] = search;

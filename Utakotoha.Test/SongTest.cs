@@ -5,8 +5,8 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net;
 using System.IO;
-using Sgml;
 using System.Xml.Linq;
+using Utakotoha.Model.Bing;
 
 namespace Utakotoha.Model.Test
 {
@@ -32,7 +32,7 @@ namespace Utakotoha.Model.Test
             var array = new Song("吉幾三", "").SearchFromArtist().ToEnumerable().ToArray();
 
             array.Count().Is(i => i > 1);
-            array.All(sr => sr.Title.Contains("吉幾三 歌詞情報 - goo 音楽")).Is(true);
+            array.All(sr => sr.Title.Contains("吉幾三")).Is(true);
             array.All(sr => sr.Url.Contains("http://music.goo.ne.jp/lyric/") && sr.Url.EndsWith("index.html")).Is(true);
         }
 
@@ -43,7 +43,7 @@ namespace Utakotoha.Model.Test
             var array = new Song("", "花").SearchFromTitle().ToEnumerable().ToArray();
 
             array.Count().Is(i => i > 1);
-            array.Select(sr => sr.Title).All(s => s.Contains("花") && s.Contains("歌詞情報 - goo 音楽")).Is(true);
+            array.Select(sr => sr.Title).All(s => s.Contains("花")).Is(true);
             array.Select(sr => sr.Url).All(s => s.Contains("http://music.goo.ne.jp/lyric/") && s.EndsWith("index.html")).Is(true);
         }
     }

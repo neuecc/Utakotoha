@@ -6,12 +6,14 @@ namespace Utakotoha.Model.Bing
     public class SearchWord
     {
         public string Query { get; set; }
-        public SearchMode SearchMode { get; set; }
+        public SearchLogicalOp SearchLogicalOp { get; set; }
+        public SearchTarget SearchTarget { get; set; }
 
-        public SearchWord(string query, SearchMode searchMode = SearchMode.All)
+        public SearchWord(string query, SearchLogicalOp logicalOp = SearchLogicalOp.And, SearchTarget target = SearchTarget.All)
         {
             this.Query = query;
-            this.SearchMode = searchMode;
+            this.SearchLogicalOp = logicalOp;
+            this.SearchTarget = target;
         }
     }
 
@@ -19,9 +21,11 @@ namespace Utakotoha.Model.Bing
     {
         public static string BuildQuery(this IEnumerable<SearchWord> searchWords)
         {
-            return searchWords.GroupBy(s => s.SearchMode)
-                .Select(xs => ((xs.Key == SearchMode.All) ? "" : xs.Key.ToString().ToLower() + ":")
-                    + "(" + xs.Select(s => s.Query).Join(" AND ") + ")")
+            return searchWords
+                .Select((x, i) =>
+                      ((i == 0 && x.SearchLogicalOp != SearchLogicalOp.Not) ? "" : x.SearchLogicalOp.ToString().ToUpper() + " ")
+                    + ((x.SearchTarget == SearchTarget.All) ? "" : x.SearchTarget.ToString().ToLower() + ":")
+                    + x.Query.Quote())
                 .Join(" ");
         }
     }
