@@ -84,6 +84,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Bing\SearchMode.cs" />
+    <Compile Include="Model\Bing\SearchWebResult.cs" />
+    <Compile Include="Model\Bing\SearchWord.cs" />
     <Compile Include="Model\Key.cs" />
     <Compile Include="Model\MediaPlayerStatus.cs" />
     <Compile Include="Utility\Logging.cs" />

@@ -10,37 +10,43 @@ using System.IO;
 #if WINDOWS_PHONE
 using Microsoft.Phone.Reactive;
 using System.Runtime.Serialization;
+using Utakotoha.Model.Bing;
 #endif
 
 namespace Utakotoha.Model
 {
-    public enum GoogleSearchMode
-    {
-        AllInPage, AllInTitle, AllInText, AllInUrl, AllInAnchor
-    }
+
 
     public class GoogleRequest
     {
         public string Site { get; set; }
+        public string Language { get; set; }
+        public string Location { get; set; }
         public string[] ExceptKeywords { get; set; }
-        public GoogleSearchMode SearchMode { get; set; }
 
         public int Num { get; set; }
 
-        private string BuildQuery(string[] keywords)
+        private string BuildQuery(string[] words)
         {
-            var queryOption = (SearchMode == GoogleSearchMode.AllInPage) ? "" : SearchMode.ToString().ToLower() + ":";
-            var site = (Site == null) ? "" : "site:" + Site;
-            var except = (ExceptKeywords == null) ? "" : ExceptKeywords.Select(s => "-" + s.Wrap("\"")).Join(" ");
-            var keyword = keywords.Select(s => s.Wrap("\"")).Join(" ");
+            //var site = (Site == null) ? "" : "site:" + Site;
+            //var except = (ExceptKeywords == null) ? "" : "-" + ExceptKeywords.Select(s => s. .Wrap("\"")).Join(" OR ");
 
-            var query =
-                "q" + "=" + Uri.EscapeUriString(queryOption + keywords + except + site)
-                + "&v=1.0"
-                + "&rsz=8"
-                + "&hl=ja";
 
-            return "https://ajax.googleapis.com/ajax/services/search/web?" + query;
+            //var keyword = keywords.Select(s => s.Wrap("\"")).Join(" ");
+
+            //var query =
+            //    "q" + "=" + Uri.EscapeUriString(queryOption + keywords + except + site)
+            //    + "&v=1.0"
+            //    + "&rsz=8"
+            //    + "&hl=ja";
+
+            // return "https://ajax.googleapis.com/ajax/services/search/web?" + query;
+            return null;
+        }
+
+        public GoogleRequest()
+        {
+
         }
 
         private string CleanHref(string href)
@@ -71,30 +77,6 @@ namespace Utakotoha.Model
                     var a = x.Element("a");
                     return new SearchResult(a.Value, a.Attribute("href").Value.Pipe(CleanHref));
                 });
-        }
-    }
-
-    /// <summary>JSON Structure of Google Search</summary>
-    [DataContract]
-    public class GoogleSearchResult
-    {
-        [DataMember]
-        public ResponseData responseData { get; set; }
-
-        [DataContract]
-        public class ResponseData
-        {
-            [DataMember]
-            public Results[] results { get; set; }
-
-            [DataContract]
-            public class Results
-            {
-                [DataMember]
-                public string unescapedUrl { get; set; }
-                [DataMember]
-                public string title { get; set; }
-            }
         }
     }
 }
