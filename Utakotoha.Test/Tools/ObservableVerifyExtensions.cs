@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Microsoft.VisualStudio.TestTools.UnitTesting
 {
-    public static class Verifier
+    public static class ObservableVerifyExtensions
     {
         /// <summary>verify called count when disposed. first argument is called count.</summary>
         public static IObservable<T> Verify<T>(this IObservable<T> source, Expression<Func<int, bool>> verify)

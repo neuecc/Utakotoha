@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -14,55 +15,63 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     shell:SystemTray.IsVisible="True" Visibility="Visible">
     <phone:PhoneApplicationPage.Resources>
-
-        <Style x:Key="PivotStyle1" TargetType="controls:Pivot">
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="controls:Pivot">
-                        <Grid Background="Transparent">
-                            <ItemsPresenter x:Name="PivotItemPresenter" Margin="0" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
+        <DataTemplate x:Key="PivotHeaderTemplate">
+            <Grid>
+                <TextBlock Text="{Binding}" Style="{StaticResource PhoneTextTitle2Style}" />
+            </Grid>
+        </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
 
+
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <toolkit:PerformanceProgressBar IsIndeterminate="False" x:Name="MainProgressBar" VerticalAlignment="Top" />
 
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,0,0,0">
-            <TextBlock x:Name="ApplicationTitle" Text="{Binding Value.Title, Source={StaticResource AssemblyInfoData}}" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="Song Title - Artist Name" Margin="12,0,0,0" Style="{StaticResource PhoneTextTitle2Style}"/>
-        </StackPanel>
-
-        <controls:Pivot Name="MainPivot" Grid.Row="1" Style="{StaticResource PivotStyle1}">
+        <controls:Pivot Name="MainPivot" Title="{Binding Value.Title, Source={StaticResource AssemblyInfoData}}" HeaderTemplate="{StaticResource PivotHeaderTemplate}">
             <!--Pivot item one-->
-            <controls:PivotItem>
-                <ListBox x:Name="SearchListBox">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Margin="0,0,0,17">
-                                <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
-                                <TextBlock Text="{Binding Description}" TextWrapping="NoWrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+            <controls:PivotItem Header="Search">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <toolkit:ListPicker Grid.Row="0" Name="SearchListPicker">
+                        <toolkit:ListPicker.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DisplayText}" />
+                            </DataTemplate>
+                        </toolkit:ListPicker.ItemTemplate>
+                    </toolkit:ListPicker>
+
+                    <ListBox x:Name="SearchListBox" Grid.Row="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,0,17">
+                                    <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
+                                    <TextBlock Text="{Binding Description}" TextWrapping="NoWrap" Margin="12,-6,12,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
             </controls:PivotItem>
 
             <!--Pivot item two-->
-            <controls:PivotItem>
+            <controls:PivotItem Name="LyricPivotItem" Header="Lyric">
                 <phone:WebBrowser Name="LyricBrowser" IsScriptEnabled="True" Grid.Row="1" />
             </controls:PivotItem>
         </controls:Pivot>
     </Grid>
 
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" Opacity="0.9">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="search" />
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="tweet"  />
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="settings" />
+                <shell:ApplicationBarMenuItem Text="about/help"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
 
 </phone:PhoneApplicationPage>

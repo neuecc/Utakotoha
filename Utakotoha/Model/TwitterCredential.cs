@@ -1,4 +1,5 @@
 ﻿using Codeplex.OAuth;
+using System.Runtime.Serialization;
 
 namespace Utakotoha.Model
 {

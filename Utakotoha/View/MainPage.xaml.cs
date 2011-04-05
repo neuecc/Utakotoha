@@ -1,93 +1,120 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Microsoft.Phone.Controls;
-using System.IO;
-using Microsoft.Xna.Framework;
 using System.Text.RegularExpressions;
-using Microsoft.Phone.Reactive;
+using System.Windows;
 using System.Windows.Navigation;
-using System.Diagnostics;
-using System.Text;
-using System.Windows.Threading;
-using System.Xml.Linq;
-using Microsoft.Xna.Framework.Media;
-using System.Reflection;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Reactive;
 using Microsoft.Phone.Shell;
-using System.IO.IsolatedStorage;
 using Utakotoha.Model;
 using Utakotoha.Model.Bing;
-using System.Collections.ObjectModel;
 
 namespace Utakotoha.View
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        public class SearchSource
+        {
+            public string DisplayText { get; set; }
+            public Func<Song, IObservable<SearchWebResult>> SearchMethod { get; set; }
+        }
+
         const string GooUri = "http://music.goo.ne.jp";
         const string GooLyricUri = "http://music.goo.ne.jp/lyric";
+        readonly SearchWebResult NotFound = new SearchWebResult { Title = "Not Found", Description = "Not Found or Not Seacrh Yet" };
+        readonly SearchWebResult Error = new SearchWebResult { Title = "Error", Description = "Network Error" };
 
         ObservableCollection<SearchWebResult> searchResults = new ObservableCollection<SearchWebResult>();
+        List<IDisposable> disposables = new List<IDisposable>();
 
         public MainPage()
         {
             InitializeComponent();
 
-            ApplicationBar = CommonApplicationBar.Create();
             SearchListBox.ItemsSource = searchResults;
+            SearchListPicker.ItemsSource = new[]
+            {
+                new SearchSource{DisplayText = "from playing artist & song title", SearchMethod = o => o.SearchLyric()},
+                new SearchSource{DisplayText = "from playing song title", SearchMethod = o => o.SearchFromTitle()},
+                new SearchSource{DisplayText = "from playing artist", SearchMethod = o => o.SearchFromArtist()}
+            };
 
-
-            var sr = new SearchWebResult { Title = "俺ら東京さ行ぐだ", Url = "http://music.goo.ne.jp/lyric/LYRUTND1127/index.html" };
-            searchResults.Add(sr);
-
-            SearchListBox.SelectionChangedAsObservable()
-                .Subscribe(e =>
-                {
-                    var r = e.EventArgs.AddedItems.Cast<SearchWebResult>().First();
-                    LyricBrowser.Navigate(new Uri(r.Url));
-                    MainPivot.SelectedIndex = 1;
-                });
+            searchResults.Add(NotFound);
         }
 
-        CompositeDisposable disposables = new CompositeDisposable();
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void SwitchProgress(bool isOnProgress)
         {
-            base.OnNavigatedTo(e);
+            MainProgressBar.IsIndeterminate = isOnProgress;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs navArgs)
+        {
+            base.OnNavigatedTo(navArgs);
+
+            // Tap ListBox
+            SearchListBox.SelectionChangedAsObservable()
+                .Where(e => e.EventArgs.AddedItems.Count > 0)
+                .Select(e => e.EventArgs.AddedItems.Cast<SearchWebResult>().First())
+                .Where(r => !string.IsNullOrEmpty(r.Url))
+                .Subscribe(r =>
+                {
+                    LyricPivotItem.Header = r.Title;
+                    LyricBrowser.Navigate(new Uri(r.Url));
+                    MainPivot.SelectedIndex = 1;
+                })
+                .Tap(disposables.Add);
+
+            // Search Lyrics
             Observable.Merge(
                     MediaPlayerStatus.PlayingSongChanged(),
                     MediaPlayerStatus.PlayingSongActive())
-                .Where(_ => Settings.Load().IsAutoSearchWhenMusicChanged)
-                .Report(_ =>
+                .Where(_ => Settings.Default.IsAutoSearchWhenMusicChanged)
+                .Merge(ApplicationBar.Buttons.Cast<ApplicationBarIconButton>()
+                    .First(b => b.Text == "search")
+                    .ClickAsObservable()
+                    .Select(_ => MediaPlayerStatus.FromCurrent().ActiveSong)
+                    .Where(s => s != null)
+                    .Select(s => new Song(s.Artist.Name, s.Name))
+                    .Report(_ => MainPivot.SelectedIndex = 0))
+                .ObserveOnDispatcher()
+                .Do(_ =>
                 {
+                    SwitchProgress(true);
                     searchResults.Clear();
                 })
-                // .SelectMany(a => a.SearchLyric())
-                .SelectMany(a => a.SearchFromArtist())
-                .ObserveOnDispatcher()
-                .Subscribe(searchResults.Add)
+                .SelectMany(s => (SearchListPicker.SelectedItem as SearchSource)
+                    .SearchMethod(s)
+                    .ObserveOnDispatcher()
+                    .Finally(() => SwitchProgress(false))
+                    .Publish(xs =>
+                    {
+                        // normal
+                        xs.Subscribe(searchResults.Add);
+                        // not found
+                        xs.Any()
+                            .Where(found => !found)
+                            .Subscribe(_ => searchResults.Add(NotFound));
+                        // I'm Feeling Lucky
+                        xs.Count()
+                            .Any()
+                            .Where(found => found && Settings.Default.IsAutoSelectFirstMatch)
+                            .Subscribe(_ => SearchListBox.SelectedIndex = 0);
+
+                        return xs;
+                    }))
+                .Catch((Exception ex) =>
+                {
+                    searchResults.Add(Error);
+                    return Observable.Empty<SearchWebResult>();
+                })
+                .Repeat()
+                .Subscribe()
                 .Tap(disposables.Add);
 
-            //.SelectMany(s => s.SearchLyric(), (song, searchresult) => new { song, searchresult })
-            //.ObserveOnDispatcher()
-            //.Subscribe(a =>
-            //{
-            //    IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong] = a.song;
-            //    IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult] = a.searchresult;
-            //    IsolatedStorageSettings.ApplicationSettings.Save();
-            //    NavigationService.Navigate(new Uri("/View/LyricBrowse.xaml", UriKind.Relative));
-            //});
-
-
-
-
-
+            // Show Lyric to Browser
             LyricBrowser.NavigatedAsObservable()
                  .Where(ev => ev.EventArgs.Uri.AbsoluteUri.Contains(GooLyricUri))
                  .SelectMany(ev =>
@@ -113,34 +140,79 @@ namespace Utakotoha.View
                             var sb = [];
                             for(var i = 0; i < array.length; i++) sb.push(array[i]);
                             document.getElementById('lyric_area').innerHTML = sb.join('<br />')");
-                 })
+
+                     // change background color
+                     if (ApplicationThemeManager.Current == ApplicationTheme.Dark)
+                     {
+                         LyricBrowser.InvokeScript("eval", @"
+                            var divs = document.getElementsByTagName('div');
+                            for(var i = 0, len = divs.length; i < len; i++)
+                            {
+                                divs[i].style.color = 'white';
+                                divs[i].style.backgroundColor = 'black';
+                            }
+                         ");
+                     }
+                 }, e => MessageBox.Show("Browser Error"))
                  .Tap(disposables.Add);
 
-                MediaPlayerStatus.PlayingSongChanged()
-                   .Where(_ => Settings.Load().IsAutoSearchWhenMusicChanged)
-                   .SelectMany(s => s.SearchLyric(), (newsong, searchresult) => new { newsong, searchresult })
-                   .ObserveOnDispatcher()
-                   .Subscribe(a =>
-                   {
-                       IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong] = a.newsong;
-                       IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult] = a.searchresult;
-                       IsolatedStorageSettings.ApplicationSettings.Save();
-                       PageTitle.Text = a.newsong.Title + " - " + a.newsong.Artist;
-                       LyricBrowser.Navigate(new Uri(a.searchresult.Url));
-                   })
-                   .Tap(disposables.Add);
+            // Tweet
+            ApplicationBar.Buttons.Cast<ApplicationBarIconButton>()
+                .First(b => b.Text == "tweet")
+                .ClickAsObservable()
+                .Select(_ => MediaPlayerStatus.FromCurrent())
+                .Subscribe(song =>
+                {
+                    var credential = Settings.Default.TwitterCredential;
+                    if (credential == null)
+                    {
+                        MessageBox.Show("at first, authorize twitter id");
+                        return;
+                    }
+                    if (song.ActiveSong == null)
+                    {
+                        MessageBox.Show("at first, play song");
+                        return;
+                    }
 
-                //var song = (Utakotoha.Model.Song)IsolatedStorageSettings.ApplicationSettings[Key.PlayingSong];
-                //var searchResult = (SearchWebResult)IsolatedStorageSettings.ApplicationSettings[Key.SongSearchResult];
+                    var hash = " #NowPlaying";
+                    var songconcat = song.ActiveSong.Name + " - " + song.ActiveSong.Artist;
+                    var msg = (songconcat.Length > 140) ? songconcat.Substring(0, 140)
+                        : ((songconcat + hash).Length > 140) ? songconcat
+                        : songconcat + hash;
 
-                //PageTitle.Text = song.Title + " - " + song.Artist;
-                //Dispatcher.BeginInvoke(() => LyricBrowser.Navigate(new Uri(searchResult.Url)));
+                    var ok = MessageBox.Show("Post:" + msg, "", MessageBoxButton.OKCancel);
+                    if (ok != MessageBoxResult.OK) return;
+
+                    SwitchProgress(true);
+                    new TwitterRequest(credential.AccessToken)
+                        .Post(msg)
+                        .ObserveOnDispatcher()
+                        .Finally(() => SwitchProgress(false))
+                        .Subscribe(_ => { }, e => { MessageBox.Show("Post Failed"); });
+                })
+                .Tap(disposables.Add);
+
+            // Settings
+            ApplicationBar.MenuItems.Cast<ApplicationBarMenuItem>()
+                .First(b => b.Text == "settings")
+                .ClickAsObservable()
+                .Subscribe(_ => NavigationService.Navigate(new Uri("/View/SettingsPage.xaml", UriKind.Relative)))
+                .Tap(disposables.Add);
+
+            // About
+            ApplicationBar.MenuItems.Cast<ApplicationBarMenuItem>()
+                .First(b => b.Text == "about/help")
+                .ClickAsObservable()
+                .Subscribe(_ => NavigationService.Navigate(new Uri("/View/AboutPage.xaml", UriKind.Relative)))
+                .Tap(disposables.Add);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            disposables.Dispose();
+            disposables.ForEach(d => d.Dispose());
+            disposables.Clear();
         }
     }
 }

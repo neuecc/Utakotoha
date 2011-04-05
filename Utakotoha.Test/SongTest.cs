@@ -21,7 +21,7 @@ namespace Utakotoha.Model.Test
             var array = song.SearchLyric().ToEnumerable().ToArray();
 
             array.Count().Is(1);
-            array.First().Title.Is("俺ら東京さ行ぐだ 吉幾三 歌詞情報 - goo 音楽");
+            array.First().Title.Is("俺ら東京さ行ぐだ 吉幾三");
             array.First().Url.Is("http://music.goo.ne.jp/lyric/LYRUTND1127/index.html");
         }
 

@@ -14,6 +14,8 @@ namespace Utakotoha.Model
     {
         private static SearchWord LyricSite = new SearchWord("http://music.goo.ne.jp/lyric", SearchLogicalOp.And, SearchTarget.Site);
         private static SearchWord InAnchor = new SearchWord("index.html", SearchLogicalOp.And, SearchTarget.InAnchor);
+        private static SearchWord Location = new SearchWord("jp", SearchLogicalOp.And, SearchTarget.Location);
+        private static SearchWord Language = new SearchWord("ja", SearchLogicalOp.And, SearchTarget.Language);
 
         [DataMember]
         public string Artist { get; private set; }
@@ -46,7 +48,7 @@ namespace Utakotoha.Model
         public IObservable<SearchWebResult> SearchLyric()
         {
             return new BingRequest()
-                .Search(MakeWord(Artist), MakeWord(Title), LyricSite)
+                .Search(MakeWord(Artist), MakeWord(Title), LyricSite, Location, Language)
                 .Where(sr => sr.Title.Contains(Artist)
                           && sr.Title.Contains(Title)
                           && sr.Url.EndsWith("index.html"))
@@ -56,7 +58,7 @@ namespace Utakotoha.Model
         public IObservable<SearchWebResult> SearchFromArtist()
         {
             return new BingRequest()
-                .Search(MakeWord(Artist), InAnchor, LyricSite)
+                .Search(MakeWord(Artist), InAnchor, LyricSite, Location, Language)
                 .Where(sr => sr.Title.Contains(Artist)
                           && sr.Url.EndsWith("index.html"))
                 .Do(Clean);
@@ -65,7 +67,7 @@ namespace Utakotoha.Model
         public IObservable<SearchWebResult> SearchFromTitle()
         {
             return new BingRequest()
-                .Search(MakeWord(Title), InAnchor, LyricSite)
+                .Search(MakeWord(Title), InAnchor, LyricSite, Location, Language)
                 .Where(sr => sr.Title.Contains(Title)
                           && sr.Url.EndsWith("index.html"))
                 .Do(Clean);

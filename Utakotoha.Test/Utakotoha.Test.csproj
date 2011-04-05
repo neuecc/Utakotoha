@@ -87,7 +87,7 @@
     <Compile Include="Tools\ChainingAssertion.MSTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SongTest.cs" />
-    <Compile Include="Tools\Verifier.cs" />
+    <Compile Include="Tools\ObservableVerifyExtensions.cs" />
     <Compile Include="TwitterRequestTest.cs" />
     <Compile Include="MediaPlayerStatusTest.cs" />
     <Compile Include="BingTest.cs" />

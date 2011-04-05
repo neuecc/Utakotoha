@@ -21,6 +21,7 @@ namespace Utakotoha
             return Observable.FromEvent<System.Windows.Navigation.NavigationEventArgs>(
                 h => target.Navigated += h, h => target.Navigated -= h);
         }
+
         public static IObservable<IEvent<RoutedEventArgs>> ClickAsObservable(this ButtonBase target)
         {
             return Observable.FromEvent<RoutedEventHandler, RoutedEventArgs>(
@@ -43,6 +44,18 @@ namespace Utakotoha
         {
             return Observable.FromEvent<SelectionChangedEventHandler, SelectionChangedEventArgs>(
                 h => h.Invoke, h => target.SelectionChanged += h, h => target.SelectionChanged -= h);
+        }
+
+        public static IObservable<IEvent<RoutedEventArgs>> CheckedAsObservable(this ToggleButton target)
+        {
+            return Observable.FromEvent<RoutedEventHandler, RoutedEventArgs>(
+                h => h.Invoke, h => target.Checked += h, h => target.Checked -= h);
+        }
+
+        public static IObservable<IEvent<RoutedEventArgs>> UncheckedAsObservable(this ToggleButton target)
+        {
+            return Observable.FromEvent<RoutedEventHandler, RoutedEventArgs>(
+                h => h.Invoke, h => target.Unchecked += h, h => target.Unchecked -= h);
         }
     }
 }
