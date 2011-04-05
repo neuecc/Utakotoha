@@ -4,6 +4,7 @@ using System.Windows.Controls.Primitives;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Reactive;
 using Microsoft.Phone.Shell;
+using System.Windows.Controls;
 
 namespace Utakotoha
 {
@@ -30,6 +31,18 @@ namespace Utakotoha
         {
             return Observable.FromEvent<EventHandler, EventArgs>(
                 h => h.Invoke, h => target.Click += h, h => target.Click -= h);
+        }
+
+        public static IObservable<IEvent<SelectionChangedEventArgs>> SelectionChangedAsObservable(this Pivot target)
+        {
+            return Observable.FromEvent<SelectionChangedEventHandler, SelectionChangedEventArgs>(
+                h => h.Invoke, h => target.SelectionChanged += h, h => target.SelectionChanged -= h);
+        }
+
+        public static IObservable<IEvent<SelectionChangedEventArgs>> SelectionChangedAsObservable(this Selector target)
+        {
+            return Observable.FromEvent<SelectionChangedEventHandler, SelectionChangedEventArgs>(
+                h => h.Invoke, h => target.SelectionChanged += h, h => target.SelectionChanged -= h);
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using Utakotoha.Model.Bing;
+using System.Text.RegularExpressions;
 
 namespace Utakotoha.Model
 {
@@ -35,6 +36,12 @@ namespace Utakotoha.Model
             return new SearchWord(keyword, SearchLogicalOp.And, target);
         }
 
+        private void Clean(SearchWebResult result)
+        {
+            result.Title = Regex.Replace(result.Title, "歌詞情報.+$", "").Trim();
+            result.Description = Regex.Replace(result.Description, "^.+の歌詞:", "").Trim();
+        }
+
         // not put inanchor for query. inanchor down to precision.
         public IObservable<SearchWebResult> SearchLyric()
         {
@@ -42,7 +49,8 @@ namespace Utakotoha.Model
                 .Search(MakeWord(Artist), MakeWord(Title), LyricSite)
                 .Where(sr => sr.Title.Contains(Artist)
                           && sr.Title.Contains(Title)
-                          && sr.Url.EndsWith("index.html"));
+                          && sr.Url.EndsWith("index.html"))
+                .Do(Clean);
         }
 
         public IObservable<SearchWebResult> SearchFromArtist()
@@ -50,7 +58,8 @@ namespace Utakotoha.Model
             return new BingRequest()
                 .Search(MakeWord(Artist), InAnchor, LyricSite)
                 .Where(sr => sr.Title.Contains(Artist)
-                          && sr.Url.EndsWith("index.html"));
+                          && sr.Url.EndsWith("index.html"))
+                .Do(Clean);
         }
 
         public IObservable<SearchWebResult> SearchFromTitle()
@@ -58,7 +67,8 @@ namespace Utakotoha.Model
             return new BingRequest()
                 .Search(MakeWord(Title), InAnchor, LyricSite)
                 .Where(sr => sr.Title.Contains(Title)
-                          && sr.Url.EndsWith("index.html"));
+                          && sr.Url.EndsWith("index.html"))
+                .Do(Clean);
         }
     }
 }

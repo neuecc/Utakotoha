@@ -64,6 +64,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Phone.Controls, Version=7.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Phone.Interop" />
     <Reference Include="Microsoft.Phone.Reactive" />
     <Reference Include="Microsoft.Xna.Framework" />
@@ -92,9 +93,6 @@
     <Compile Include="Model\Key.cs" />
     <Compile Include="Model\MediaPlayerStatus.cs" />
     <Compile Include="Utility\Logging.cs" />
-    <Compile Include="View\LyricBrowse.xaml.cs">
-      <DependentUpon>LyricBrowse.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utility\AssemblyInfoData.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\TwitterCredential.cs" />
@@ -118,10 +116,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Page Include="View\LyricBrowse.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\TwitterAuth.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
