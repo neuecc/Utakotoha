@@ -66,8 +66,10 @@
             </controls:PivotItem>
 
             <!--Pivot item two-->
-            <controls:PivotItem Header="Help">
-                <Grid/>
+            <controls:PivotItem Header="Help" Margin="0" Padding="0">
+                <ScrollViewer>
+                    <Image Source="/Utakotoha;component/Images/help.png" Stretch="None" />
+                </ScrollViewer>
             </controls:PivotItem>
         </controls:Pivot>
     </Grid>

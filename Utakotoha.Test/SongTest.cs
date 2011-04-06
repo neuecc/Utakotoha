@@ -43,7 +43,6 @@ namespace Utakotoha.Model.Test
             var array = new Song("", "花").SearchFromTitle().ToEnumerable().ToArray();
 
             array.Count().Is(i => i > 1);
-            array.Select(sr => sr.Title).All(s => s.Contains("花")).Is(true);
             array.Select(sr => sr.Url).All(s => s.Contains("http://music.goo.ne.jp/lyric/") && s.EndsWith("index.html")).Is(true);
         }
     }

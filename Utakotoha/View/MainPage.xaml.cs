@@ -88,6 +88,11 @@ namespace Utakotoha.View
                 .SelectMany(s => (SearchListPicker.SelectedItem as SearchSource)
                     .SearchMethod(s)
                     .ObserveOnDispatcher()
+                    .Catch((Exception ex) =>
+                    {
+                        searchResults.Add(Error);
+                        return Observable.Empty<SearchWebResult>();
+                    })
                     .Finally(() => SwitchProgress(false))
                     .Publish(xs =>
                     {
@@ -105,11 +110,6 @@ namespace Utakotoha.View
 
                         return xs;
                     }))
-                .Catch((Exception ex) =>
-                {
-                    searchResults.Add(Error);
-                    return Observable.Empty<SearchWebResult>();
-                })
                 .Repeat()
                 .Subscribe()
                 .Tap(disposables.Add);

@@ -64,9 +64,9 @@
     </Grid>
 
     <phone:PhoneApplicationPage.ApplicationBar>
-        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" Opacity="0.9">
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="search" />
-            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="tweet"  />
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" Opacity=".5">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.feature.search.rest.png" Text="search" />
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar.tweet.rest.png" Text="tweet"  />
             <shell:ApplicationBar.MenuItems>
                 <shell:ApplicationBarMenuItem Text="settings" />
                 <shell:ApplicationBarMenuItem Text="about/help"/>
