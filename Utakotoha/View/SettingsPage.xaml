@@ -30,6 +30,7 @@
         <StackPanel x:Name="StackPanel" Grid.Row="1" Margin="12,0,12,0">
             <CheckBox Content="auto search if detect song changed" Height="72" Name="AutoSearchCheckBox"  />
             <CheckBox Content="auto select first result of search" Height="72" Name="AutoSelectCheckBox"  />
+            <CheckBox Content="bgColor of lyric browser fit to theme" Height="72" Name="BgColorCheckBox"  />
             <TextBlock Text="Twitter Status" Style="{StaticResource PhoneTextGroupHeaderStyle}" />
             <TextBlock Text="Not Authorized" Style="{StaticResource PhoneTextTitle2Style}" Name="AuthorizedStatus" />
             <Button Content="Authorize Account" Name="AuthroizeButton" />

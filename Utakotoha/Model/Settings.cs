@@ -13,6 +13,7 @@ namespace Utakotoha.Model
         public TwitterCredential TwitterCredential { get; set; }
         public bool IsAutoSearchWhenMusicChanged { get; set; }
         public bool IsAutoSelectFirstMatch { get; set; }
+        public bool IsChangeBrowserColor { get; set; }
 
         public Settings()
         {
@@ -26,6 +27,7 @@ namespace Utakotoha.Model
             {
                 IsAutoSearchWhenMusicChanged = this.IsAutoSearchWhenMusicChanged,
                 IsAutoSelectFirstMatch = this.IsAutoSelectFirstMatch,
+                IsChangeBrowserColor = this.IsChangeBrowserColor,
                 TwitterKey = (this.TwitterCredential != null) ? TwitterCredential.AccessToken.Key : null,
                 TwitterSecret = (this.TwitterCredential != null) ? TwitterCredential.AccessToken.Secret : null,
                 TwitterScreenName = (this.TwitterCredential != null) ? TwitterCredential.ScreenName : null
@@ -42,6 +44,7 @@ namespace Utakotoha.Model
                 {
                     IsAutoSearchWhenMusicChanged = container.IsAutoSearchWhenMusicChanged,
                     IsAutoSelectFirstMatch = container.IsAutoSelectFirstMatch,
+                    IsChangeBrowserColor = container.IsChangeBrowserColor,
                     TwitterCredential = container.TwitterScreenName == null
                         ? null
                         : new TwitterCredential(
@@ -63,6 +66,8 @@ namespace Utakotoha.Model
         public bool IsAutoSearchWhenMusicChanged { get; set; }
         [DataMember]
         public bool IsAutoSelectFirstMatch { get; set; }
+        [DataMember]
+        public bool IsChangeBrowserColor { get; set; }
         [DataMember]
         public string TwitterScreenName { get; set; }
         [DataMember]

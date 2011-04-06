@@ -21,7 +21,48 @@
         <controls:Pivot Title="{Binding Value.Title, Source={StaticResource AssemblyInfoData}}">
             <!--Pivot item one-->
             <controls:PivotItem Header="About">
-                <Grid/>
+                <StackPanel>
+                    <TextBlock
+                        Style="{StaticResource PhoneTextExtraLargeStyle}"
+                        Text="{Binding Value.Title, Source={StaticResource AssemblyInfoData}}"
+                        Foreground="{StaticResource PhoneAccentBrush}" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            Margin="12,0,0,0"
+                            Style="{StaticResource PhoneTextLargeStyle}"
+                            Text="Ver." />
+                        <TextBlock
+                            Margin="0"
+                            Style="{StaticResource PhoneTextLargeStyle}"
+                            Text="{Binding Value.Version, Source={StaticResource AssemblyInfoData}}" />
+                    </StackPanel>
+                    <HyperlinkButton
+                        HorizontalAlignment="Left"
+                        Name="UtakotohaLink"
+                        Content="http://utakotoha.codeplex.com/"/>
+                    <TextBlock
+                        Style="{StaticResource PhoneTextNormalStyle}"
+                        Text="Source code available(under Ms-PL License)" />
+
+                    <TextBlock
+                        Style="{StaticResource PhoneTextNormalStyle}"
+                        Text="Created by @neuecc - http://neue.cc/" />
+
+                    <TextBlock
+                        Style="{StaticResource PhoneTextGroupHeaderStyle}"
+                        Margin="12,30,0,0"
+                        Text="Using following API/Libraries" />
+                    <TextBlock Style="{StaticResource PhoneTextNormalStyle}">
+                        <Run>+ goo</Run><LineBreak />
+                        <Run>http://music.goo.ne.jp/</Run><LineBreak />
+                        <Run>+ Bing</Run><LineBreak />
+                        <Run>http://bing.com/</Run><LineBreak />
+                        <Run>+ ReactiveOAuth</Run><LineBreak />
+                        <Run>http://reactiveoauth.codeplex.com/</Run><LineBreak />
+                        <Run>+ Silverlight Toolkit</Run><LineBreak />
+                        <Run>http://silverlight.codeplex.com/</Run><LineBreak />
+                    </TextBlock>
+                </StackPanel>
             </controls:PivotItem>
 
             <!--Pivot item two-->

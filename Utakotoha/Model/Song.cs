@@ -49,27 +49,23 @@ namespace Utakotoha.Model
         {
             return new BingRequest()
                 .Search(MakeWord(Artist), MakeWord(Title), LyricSite, Location, Language)
-                .Where(sr => sr.Title.Contains(Artist)
-                          && sr.Title.Contains(Title)
-                          && sr.Url.EndsWith("index.html"))
+                .Where(sr => sr.Url.EndsWith("index.html"))
                 .Do(Clean);
         }
 
         public IObservable<SearchWebResult> SearchFromArtist()
         {
             return new BingRequest()
-                .Search(MakeWord(Artist), InAnchor, LyricSite, Location, Language)
-                .Where(sr => sr.Title.Contains(Artist)
-                          && sr.Url.EndsWith("index.html"))
+                .Search(MakeWord(Artist), LyricSite, Location, Language)
+                .Where(sr => sr.Url.EndsWith("index.html"))
                 .Do(Clean);
         }
 
         public IObservable<SearchWebResult> SearchFromTitle()
         {
             return new BingRequest()
-                .Search(MakeWord(Title), InAnchor, LyricSite, Location, Language)
-                .Where(sr => sr.Title.Contains(Title)
-                          && sr.Url.EndsWith("index.html"))
+                .Search(MakeWord(Title), LyricSite, Location, Language)
+                .Where(sr => sr.Url.EndsWith("index.html"))
                 .Do(Clean);
         }
     }

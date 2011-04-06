@@ -25,7 +25,7 @@ namespace Utakotoha.Model.Bing
             this.Offset = 0;
             this.Market = "en-us";
         }
-
+        
         private string BuildUrl(IEnumerable<SearchWord> words)
         {
             var query =

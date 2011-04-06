@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Utakotoha")]
-[assembly: AssemblyDescription("Lyric Browser of Japanese Music")]
+[assembly: AssemblyDescription("Lyric Browser of Japanese Song")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("neuecc")]
 [assembly: AssemblyProduct("Utakotoha")]

@@ -43,8 +43,8 @@ namespace Utakotoha.Model
         public static IObservable<Song> PlayingSongChanged(int waitSeconds = 2, IScheduler scheduler = null)
         {
             return ActiveSongChanged()
-                .Where(s => s.MediaState == MediaState.Playing)
                 .Throttle(TimeSpan.FromSeconds(waitSeconds), scheduler ?? Scheduler.ThreadPool) // wait for seeking
+                .Where(s => s.MediaState == MediaState.Playing)
                 .Select(s => new Song(s.ActiveSong.Artist.Name, s.ActiveSong.Name));
         }
 

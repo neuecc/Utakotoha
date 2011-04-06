@@ -9,7 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using Microsoft.Phone.Reactive;
 using Microsoft.Phone.Controls;
+using Microsoft.Phone.Tasks;
 
 namespace Utakotoha.Model.View
 {
@@ -18,6 +20,13 @@ namespace Utakotoha.Model.View
         public AboutPage()
         {
             InitializeComponent();
+
+            UtakotohaLink.ClickAsObservable().Subscribe(e =>
+            {
+                var task = new WebBrowserTask() { URL = (e.Sender as HyperlinkButton).Content.ToString() };
+                task.Show();
+            });
         }
+
     }
 }

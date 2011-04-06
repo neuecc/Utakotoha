@@ -142,7 +142,8 @@ namespace Utakotoha.View
                             document.getElementById('lyric_area').innerHTML = sb.join('<br />')");
 
                      // change background color
-                     if (ApplicationThemeManager.Current == ApplicationTheme.Dark)
+                     if (Settings.Default.IsChangeBrowserColor
+                         && ApplicationThemeManager.Current == ApplicationTheme.Dark)
                      {
                          LyricBrowser.InvokeScript("eval", @"
                             var divs = document.getElementsByTagName('div');

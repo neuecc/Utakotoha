@@ -31,6 +31,7 @@ namespace Utakotoha.Model.View
             var defsetting = Settings.Default;
             AutoSearchCheckBox.IsChecked = defsetting.IsAutoSearchWhenMusicChanged;
             AutoSelectCheckBox.IsChecked = defsetting.IsAutoSelectFirstMatch;
+            BgColorCheckBox.IsChecked = defsetting.IsChangeBrowserColor;
             AuthorizedStatus.Text = defsetting.TwitterCredential != null
                 ? "Authorized - " + defsetting.TwitterCredential.ScreenName
                 : "Not Authorized";
@@ -39,12 +40,15 @@ namespace Utakotoha.Model.View
                     AutoSearchCheckBox.CheckedAsObservable(),
                     AutoSearchCheckBox.UncheckedAsObservable(),
                     AutoSelectCheckBox.CheckedAsObservable(),
-                    AutoSelectCheckBox.UncheckedAsObservable())
+                    AutoSelectCheckBox.UncheckedAsObservable(),
+                    BgColorCheckBox.CheckedAsObservable(),
+                    BgColorCheckBox.UncheckedAsObservable())
                 .Subscribe(_ =>
                 {
                     var settings = Settings.Default;
                     settings.IsAutoSearchWhenMusicChanged = AutoSearchCheckBox.IsChecked.Value;
                     settings.IsAutoSelectFirstMatch = AutoSelectCheckBox.IsChecked.Value;
+                    settings.IsChangeBrowserColor = BgColorCheckBox.IsChecked.Value;
                     settings.Save();
                 })
                 .Tap(disposables.Add);

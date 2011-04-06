@@ -35,7 +35,7 @@ namespace Utakotoha
             }
         }
 
-        /// <summary>return log string, if file does'nt exist then return null.</summary>
+        /// <summary>return log string, if file doesn't exist then return null.</summary>
         public static string ReadData()
         {
             lock (lockgate)
