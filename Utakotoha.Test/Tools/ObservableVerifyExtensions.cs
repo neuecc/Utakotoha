@@ -34,7 +34,7 @@ namespace Microsoft.VisualStudio.TestTools.UnitTesting
         /// <summary>verify called once when disposed.</summary>
         public static IDisposable VerifyOnce<T>(this IObservable<T> source, Action<T> onNext = null)
         {
-            return source.VerifyAll(i => i == 1);
+            return source.VerifyAll(i => i == 1, onNext);
         }
     }
 }

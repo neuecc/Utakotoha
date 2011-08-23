@@ -6,6 +6,7 @@
          Description="Lyric Browser of Japanese Song" Publisher="neuecc">
         <IconPath IsRelative="true" IsResource="false">UtakotohaColor.png</IconPath>
         <Capabilities>
+            <Capability Name="ID_CAP_MEDIALIB" />
             <Capability Name="ID_CAP_NETWORKING" />
             <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
         </Capabilities>
